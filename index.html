@@ -24,6 +24,20 @@
   --r:        8px;
 }
 
+[data-theme='light'] {
+  --bg: #f4f6fb;
+  --bg2: #ffffff;
+  --bg3: #ecf1fb;
+  --bg4: #e2e9f8;
+  --border: #cfd8ea;
+  --border2: #b4c2dd;
+  --text: #2a3550;
+  --text-h: #121a2b;
+  --text-dim: #5d6d8b;
+  --blue: #275fe4;
+  --accent: #275fe4;
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -86,11 +100,46 @@ body {
 }
 
 #topbar-time {
-  margin-left: auto;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   color: var(--text-dim);
   flex-shrink: 0;
+}
+
+#topbar-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tb-input {
+  width: 170px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text);
+  border-radius: 18px;
+  font-size: 11px;
+  padding: 6px 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.tb-btn {
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text-dim);
+  border-radius: 16px;
+  font-size: 10px;
+  padding: 6px 10px;
+  font-family: 'JetBrains Mono', monospace;
+  cursor: pointer;
+}
+.tb-btn:hover { color: var(--text-h); border-color: var(--border2); }
+
+.mark-hit {
+  background: rgba(126, 231, 135, .18);
+  border-radius: 4px;
+  padding: 0 2px;
 }
 
 /* ══ ОСНОВНОЙ КОНТЕНТ ══ */
@@ -621,6 +670,9 @@ ul li::before {
   #nav-fab-current { display: none; }
   #nav-fab-sep { display: none; }
   #tooltip { width: calc(100vw - 32px); left: 16px !important; }
+  #topbar-controls { gap: 6px; }
+  .tb-input { display: none; }
+  #topbar-time { display: none; }
 }
 </style>
 </head>
@@ -632,7 +684,13 @@ ul li::before {
   <div id="topbar-logo">∎ КультВики</div>
   <div id="topbar-sep">/</div>
   <div id="topbar-title">Фембой — культурный феномен</div>
-  <div id="topbar-time">~12 мин · 18+</div>
+  <div id="topbar-controls">
+    <input id="quick-search" class="tb-input" type="search" placeholder="Поиск по лонгриду…" aria-label="Поиск по статье">
+    <button id="theme-toggle" class="tb-btn" type="button">🌗 Тема</button>
+    <button id="font-plus" class="tb-btn" type="button">A+</button>
+    <button id="font-minus" class="tb-btn" type="button">A-</button>
+    <div id="topbar-time">~12 мин · 18+</div>
+  </div>
 </header>
 
 <!-- КОНТЕНТ -->
@@ -921,6 +979,115 @@ overlay.addEventListener('click', closeSheet);
 
 document.getElementById('nav-sheet-list').querySelectorAll('a').forEach(a => {
   a.addEventListener('click', closeSheet);
+});
+
+
+/* ═══ НОВЫЕ ФУНКЦИИ UI ═══ */
+const root = document.documentElement;
+const searchInput = document.getElementById('quick-search');
+const themeToggle = document.getElementById('theme-toggle');
+const fontPlus = document.getElementById('font-plus');
+const fontMinus = document.getElementById('font-minus');
+
+let baseSize = Number(localStorage.getItem('fontSizePx') || 18);
+document.body.style.fontSize = baseSize + 'px';
+
+const savedTheme = localStorage.getItem('theme') || 'dark';
+if (savedTheme === 'light') root.setAttribute('data-theme', 'light');
+
+themeToggle.addEventListener('click', () => {
+  const isLight = root.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    root.removeAttribute('data-theme');
+    localStorage.setItem('theme', 'dark');
+  } else {
+    root.setAttribute('data-theme', 'light');
+    localStorage.setItem('theme', 'light');
+  }
+});
+
+fontPlus.addEventListener('click', () => {
+  baseSize = Math.min(baseSize + 1, 23);
+  document.body.style.fontSize = baseSize + 'px';
+  localStorage.setItem('fontSizePx', baseSize);
+});
+
+fontMinus.addEventListener('click', () => {
+  baseSize = Math.max(baseSize - 1, 15);
+  document.body.style.fontSize = baseSize + 'px';
+  localStorage.setItem('fontSizePx', baseSize);
+});
+
+function clearMarks() {
+  document.querySelectorAll('mark.mark-hit').forEach(mark => {
+    const parent = mark.parentNode;
+    parent.replaceChild(document.createTextNode(mark.textContent), mark);
+    parent.normalize();
+  });
+}
+
+function highlightInElement(el, regex) {
+  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+      if (node.parentElement?.closest('mark.mark-hit')) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  let matched = false;
+  textNodes.forEach(node => {
+    const text = node.nodeValue;
+    regex.lastIndex = 0;
+    if (!regex.test(text)) return;
+
+    matched = true;
+    regex.lastIndex = 0;
+
+    const frag = document.createDocumentFragment();
+    let last = 0;
+
+    text.replace(regex, (m, offset) => {
+      if (offset > last) frag.appendChild(document.createTextNode(text.slice(last, offset)));
+      const mark = document.createElement('mark');
+      mark.className = 'mark-hit';
+      mark.textContent = m;
+      frag.appendChild(mark);
+      last = offset + m.length;
+      return m;
+    });
+
+    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+    node.parentNode.replaceChild(frag, node);
+  });
+
+  return matched;
+}
+
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    searchInput.value = '';
+    clearMarks();
+    return;
+  }
+  if (e.key !== 'Enter') return;
+
+  clearMarks();
+  const q = searchInput.value.trim();
+  if (!q) return;
+
+  const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+  const nodes = document.querySelectorAll('#page p, #page h2, #page h3, #page li, #page blockquote p');
+
+  let first = null;
+  nodes.forEach(el => {
+    if (highlightInElement(el, rx) && !first) first = el;
+  });
+
+  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
 /* ═══ ПРОГРЕСС + АКТИВНЫЙ РАЗДЕЛ ═══ */
