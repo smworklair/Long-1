@@ -3,1123 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Фембой — культурный феномен</title>
+<title>КультВики — Лонгриды</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:       #0e1117;
-  --bg2:      #151b24;
-  --bg3:      #1a2233;
-  --bg4:      #1f2937;
-  --border:   #263040;
-  --border2:  #384860;
-  --text:     #b8c8dc;
-  --text-h:   #e2ecf8;
-  --text-dim: #4a5a6e;
-  --blue:     #6cb6ff;
-  --green:    #7ee787;
-  --green2:   #3fb950;
-  --accent:   #2d6be4;
-  --r:        8px;
-}
-
-[data-theme='light'] {
-  --bg: #f4f6fb;
-  --bg2: #ffffff;
-  --bg3: #ecf1fb;
-  --bg4: #e2e9f8;
-  --border: #cfd8ea;
-  --border2: #b4c2dd;
-  --text: #2a3550;
-  --text-h: #121a2b;
-  --text-dim: #5d6d8b;
-  --blue: #275fe4;
-  --accent: #275fe4;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-
-/* Зернистая текстура на фоне */
-body {
-  background-color: var(--bg);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(45,107,228,.07) 0%, transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  color: var(--text);
-  font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 18px;
-  font-weight: 300;
-  line-height: 1.9;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ══ ПРОГРЕСС ══ */
-#bar {
-  position: fixed; top: 0; left: 0;
-  height: 2px; width: 0;
-  background: linear-gradient(90deg, var(--accent), var(--blue));
-  z-index: 999;
-  transition: width .08s linear;
-  box-shadow: 0 0 8px rgba(108,182,255,.4);
-}
-
-/* ══ МИНИМАЛИСТИЧНЫЙ ТОПБАР ══ */
-#topbar {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: 40px;
-  background: rgba(14,17,23,.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  z-index: 200;
-  gap: 12px;
-}
-
-#topbar-logo {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  color: var(--blue);
-  letter-spacing: .04em;
-  flex-shrink: 0;
-}
-
-#topbar-sep { color: var(--border2); flex-shrink: 0; }
-
-#topbar-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-dim);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#topbar-time {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  flex-shrink: 0;
-}
-
-#topbar-controls {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tb-input {
-  width: 170px;
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text);
-  border-radius: 18px;
-  font-size: 11px;
-  padding: 6px 10px;
-  font-family: 'JetBrains Mono', monospace;
-}
-
-.tb-btn {
-  border: 1px solid var(--border);
-  background: var(--bg2);
-  color: var(--text-dim);
-  border-radius: 16px;
-  font-size: 10px;
-  padding: 6px 10px;
-  font-family: 'JetBrains Mono', monospace;
-  cursor: pointer;
-}
-.tb-btn:hover { color: var(--text-h); border-color: var(--border2); }
-
-.mark-hit {
-  background: rgba(126, 231, 135, .18);
-  border-radius: 4px;
-  padding: 0 2px;
-}
-
-/* ══ ОСНОВНОЙ КОНТЕНТ ══ */
-#page {
-  max-width: 740px;
-  margin: 0 auto;
-  padding: 72px 28px 160px;
-}
-
-/* ══ ХЕДЕР СТАТЬИ ══ */
-.article-header {
-  margin-bottom: 40px;
-  padding-bottom: 28px;
-  border-bottom: 1px solid var(--border);
-}
-
-.cats {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 16px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.cats span {
-  padding: 3px 8px;
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  transition: border-color .2s, color .2s;
-  cursor: default;
-}
-
-.cats span:hover { border-color: var(--border2); color: var(--text); }
-
-h1 {
-  font-size: clamp(30px, 5vw, 52px);
-  font-weight: 600;
-  color: var(--text-h);
-  line-height: 1.12;
-  letter-spacing: -.02em;
-  margin-bottom: 20px;
-}
-
-.article-meta {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-}
-
-.article-meta span {
-  padding: 4px 10px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-}
-
-/* ══ ИНФОБОКС ══ */
-.infobox {
-  float: right;
-  clear: right;
-  margin: 0 0 28px 32px;
-  width: 240px;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  background: var(--bg2);
-  overflow: hidden;
-  font-size: 13px;
-  box-shadow: 0 4px 24px rgba(0,0,0,.3);
-}
-
-.infobox-title {
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 14px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--blue);
-  text-align: center;
-}
-
-.infobox-row {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-}
-.infobox-row:last-child { border-bottom: none; }
-
-.infobox-row th {
-  width: 42%;
-  padding: 8px 10px;
-  font-weight: 400;
-  color: var(--text-dim);
-  font-size: 12px;
-  border-right: 1px solid var(--border);
-  vertical-align: top;
-  background: rgba(0,0,0,.1);
-}
-
-.infobox-row td {
-  padding: 8px 10px;
-  color: var(--text);
-  vertical-align: top;
-  line-height: 1.5;
-}
-
-/* ══ СЕКЦИИ ══ */
-section { padding-top: 52px; }
-
-h2 {
-  font-size: 22px;
-  font-weight: 600;
-  color: var(--text-h);
-  margin-bottom: 20px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  line-height: 1.3;
-  scroll-margin-top: 60px;
-}
-
-h2 .sec-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-dim);
-  flex-shrink: 0;
-}
-
-h3 {
-  font-size: 17px;
-  font-weight: 600;
-  color: var(--text-h);
-  margin: 32px 0 12px;
-  letter-spacing: -.01em;
-}
-
-p { margin-bottom: 18px; }
-strong { color: var(--text-h); font-weight: 600; }
-
-/* ══ ЦИТАТА — тактильная ══ */
-blockquote {
-  margin: 32px 0;
-  padding: 20px 22px 20px 20px;
-  background: var(--bg2);
-  border-left: 3px solid var(--border2);
-  border-radius: 0 var(--r) var(--r) 0;
-  position: relative;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.03);
-}
-
-blockquote p {
-  font-size: 17px;
-  font-style: italic;
-  color: var(--text-h);
-  margin: 0;
-  line-height: 1.7;
-}
-
-/* ══ СПИСОК ══ */
-ul {
-  list-style: none;
-  margin: 16px 0 20px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-}
-
-ul li {
-  padding: 11px 18px 11px 38px;
-  position: relative;
-  border-bottom: 1px solid var(--border);
-  font-size: 16px;
-  transition: background .15s;
-}
-
-ul li:last-child { border-bottom: none; }
-ul li:hover { background: rgba(108,182,255,.04); }
-
-ul li::before {
-  content: '›';
-  position: absolute;
-  left: 16px; top: 10px;
-  color: var(--blue);
-  font-size: 18px;
-  line-height: 1.5;
-}
-
-/* ══ АУТРО ══ */
-.wiki-footer {
-  margin-top: 60px;
-  padding: 20px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-dim);
-  line-height: 1.8;
-}
-
-/* ══════════════════════════════════
-   ПЛАВАЮЩАЯ КНОПКА НАВИГАЦИИ (внизу)
-══════════════════════════════════ */
-#nav-fab {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--bg3);
-  border: 1px solid var(--border2);
-  border-radius: 28px;
-  padding: 10px 20px 10px 16px;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.04);
-  transition: transform .2s, box-shadow .2s, background .2s;
-  user-select: none;
-  backdrop-filter: blur(8px);
-}
-
-#nav-fab:hover {
-  background: var(--bg4);
-  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(108,182,255,.15);
-  transform: translateX(-50%) translateY(-2px);
-}
-
-#nav-fab:active {
-  transform: translateX(-50%) translateY(0);
-}
-
-#nav-fab-icon {
-  width: 28px; height: 28px;
-  background: var(--accent);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  flex-shrink: 0;
-  box-shadow: 0 0 12px rgba(45,107,228,.4);
-}
-
-#nav-fab-text {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-h);
-  letter-spacing: .04em;
-  white-space: nowrap;
-}
-
-#nav-fab-current {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  max-width: 140px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-#nav-fab-sep {
-  width: 1px; height: 20px;
-  background: var(--border);
-  flex-shrink: 0;
-}
-
-/* ══ НАВИГАЦИОННАЯ ШТОРКА ══ */
-#nav-sheet-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(4px);
-  z-index: 600;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s;
-}
-
-#nav-sheet-overlay.open {
-  opacity: 1;
-  pointer-events: all;
-}
-
-#nav-sheet {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%) translateY(100%);
-  width: min(520px, 100vw);
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-bottom: none;
-  border-radius: 16px 16px 0 0;
-  z-index: 700;
-  transition: transform .3s cubic-bezier(.32,.72,0,1);
-  overflow: hidden;
-  box-shadow: 0 -8px 40px rgba(0,0,0,.5);
-}
-
-#nav-sheet.open {
-  transform: translateX(-50%) translateY(0);
-}
-
-#nav-sheet-handle {
-  width: 36px; height: 4px;
-  background: var(--border2);
-  border-radius: 2px;
-  margin: 12px auto 0;
-}
-
-#nav-sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px 12px;
-  border-bottom: 1px solid var(--border);
-}
-
-#nav-sheet-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-}
-
-#nav-sheet-close {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  width: 28px; height: 28px;
-  color: var(--text-dim);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color .15s, background .15s;
-  line-height: 1;
-}
-
-#nav-sheet-close:hover { color: var(--text-h); background: var(--bg4); }
-
-#nav-sheet-list {
-  list-style: none;
-  padding: 8px 0 24px;
-  max-height: 55vh;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border) transparent;
-}
-
-#nav-sheet-list li a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 11px 20px;
-  text-decoration: none;
-  color: var(--text);
-  font-size: 15px;
-  transition: background .15s, color .15s;
-  border-left: 2px solid transparent;
-}
-
-#nav-sheet-list li a:hover {
-  background: rgba(108,182,255,.06);
-  color: var(--text-h);
-}
-
-#nav-sheet-list li a.active {
-  color: var(--blue);
-  border-left-color: var(--blue);
-  background: rgba(108,182,255,.07);
-}
-
-#nav-sheet-list .snum {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  color: var(--text-dim);
-  min-width: 20px;
-  flex-shrink: 0;
-  transition: color .15s;
-}
-
-#nav-sheet-list li a.active .snum { color: var(--blue); }
-
-/* Глоссарий в шторке */
-#nav-sheet-glos {
-  border-top: 1px solid var(--border);
-  padding: 12px 20px 20px;
-}
-
-#nav-sheet-glos-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 10px;
-}
-
-#nav-sheet-glos-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-#nav-sheet-glos-list button {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 12px;
-  color: var(--green);
-  cursor: pointer;
-  font-family: 'Source Serif 4', serif;
-  transition: background .15s, border-color .15s, color .15s;
-}
-
-#nav-sheet-glos-list button:hover {
-  background: var(--bg4);
-  border-color: var(--green2);
-  color: #aeffa8;
-}
-
-/* ══ ТУЛТИП ══ */
-#tooltip {
-  position: fixed;
-  z-index: 900;
-  width: 300px;
-  background: var(--bg2);
-  border: 1px solid var(--border2);
-  border-radius: var(--r);
-  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
-  display: none;
-  overflow: hidden;
-}
-
-#tooltip.visible { display: block; animation: popIn .15s ease; }
-
-@keyframes popIn {
-  from { opacity:0; transform:translateY(8px) scale(.96); }
-  to   { opacity:1; transform:translateY(0) scale(1); }
-}
-
-#tooltip-head {
-  background: var(--bg3);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-#tooltip-term {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--green);
-  letter-spacing: .04em;
-}
-
-#tooltip-close {
-  background: none; border: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
-  padding: 0 2px;
-  transition: color .15s;
-}
-#tooltip-close:hover { color: var(--text-h); }
-
-#tooltip-body {
-  padding: 14px 16px;
-  font-size: 14px;
-  color: var(--text);
-  line-height: 1.65;
-}
-
-#tooltip-body em {
-  display: block;
-  margin-top: 10px;
-  font-size: 11px;
-  font-style: normal;
-  color: var(--text-dim);
-  font-family: 'JetBrains Mono', monospace;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-
-/* ══ ТЕРМИНЫ ══ */
-.term {
-  color: var(--green);
-  border-bottom: 1px dashed rgba(126,231,135,.4);
-  cursor: pointer;
-  text-decoration: none;
-  transition: color .15s, border-color .15s;
-}
-
-.term:hover {
-  color: #aeffa8;
-  border-bottom-color: var(--green);
-}
-
-/* ══ МОБАЙЛ ══ */
-@media (max-width: 600px) {
-  #page { padding: 60px 16px 140px; }
-  h1 { font-size: 28px; }
-  h2 { font-size: 19px; }
-  .infobox { float: none; width: 100%; margin: 0 0 24px; }
-  blockquote { padding: 16px; }
-  blockquote p { font-size: 16px; }
-  #nav-fab { bottom: 20px; padding: 9px 16px 9px 13px; }
-  #nav-fab-current { display: none; }
-  #nav-fab-sep { display: none; }
-  #tooltip { width: calc(100vw - 32px); left: 16px !important; }
-  #topbar-controls { gap: 6px; }
-  .tb-input { display: none; }
-  #topbar-time { display: none; }
-}
+  --bg:#000; --border:#1e1e1e; --border2:#2a2a2a;
+  --text:#d4cce8; --text-h:#f0ecff; --text-dim:#9080b8;
+  --blue:#b48eff; --green:#7ee787; --amber:#e3b341; --r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#000;color:var(--text);font-family:'Source Serif 4',serif;font-size:18px;line-height:1.9}
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#7c3aed,var(--blue));z-index:999}
+#topbar{position:fixed;top:0;left:0;right:0;height:44px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 14px;z-index:300}
+#topbar-logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);flex-shrink:0}
+#switcher{display:flex;gap:2px;flex:1;overflow:auto;scrollbar-width:none}
+#switcher::-webkit-scrollbar{display:none}
+.sw-btn{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);background:none;border:none;padding:6px 10px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.sw-btn.active{color:var(--text-h);border-bottom-color:var(--sw-color,var(--blue))}
+#quick-search{width:180px;background:#000;border:1px solid var(--border2);border-radius:14px;padding:5px 10px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace}
+#topbar-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);min-width:76px;text-align:right}
+.page{display:none;padding-top:44px}
+.page.active{display:block}
+.article-wrap{max-width:740px;margin:0 auto;padding:52px 28px 140px}
+.article-header{margin-bottom:34px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.cats{display:flex;gap:6px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:14px}
+.cats span{padding:3px 9px;border:1px solid var(--border);border-radius:3px}
+h1{font-size:clamp(26px,4.5vw,48px);line-height:1.15;color:var(--text-h);margin-bottom:16px}
+.article-meta{display:flex;gap:6px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim)}
+.article-meta span{border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+section{padding-top:44px;scroll-margin-top:60px}
+h2{font-size:21px;color:var(--text-h);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;gap:10px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim)}
+h3{font-size:17px;color:var(--text-h);margin:24px 0 8px}
+p{margin-bottom:14px}
+blockquote{margin:22px 0;padding:14px 16px;border-left:3px solid #4a4070;background:#000;border-radius:0 var(--r) var(--r) 0}
+blockquote p{font-style:italic;color:var(--text-h);margin:0}
+ul{list-style:none;margin:12px 0 16px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+li{padding:9px 14px 9px 32px;border-bottom:1px solid var(--border);position:relative}
+li:last-child{border-bottom:none}
+li::before{content:'›';position:absolute;left:12px;color:var(--blue)}
+.term{color:var(--green);border-bottom:1px dashed rgba(126,231,135,.4);cursor:pointer}
+#nav-fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:500;display:flex;align-items:center;gap:10px;background:#111;border:1px solid var(--border2);border-radius:28px;padding:10px 16px;cursor:pointer}
+#nav-fab-icon{width:28px;height:28px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center}
+#nav-fab-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-h)}
+#nav-fab-current{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;opacity:0;pointer-events:none;transition:.2s}
+#nav-overlay.open{opacity:1;pointer-events:all}
+#nav-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:min(540px,100vw);background:#000;border:1px solid var(--border2);border-bottom:none;border-radius:16px 16px 0 0;z-index:700;transition:.25s}
+#nav-sheet.open{transform:translateX(-50%) translateY(0)}
+#nav-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
+#nav-head-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase}
+#nav-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:#000;color:var(--text-dim);cursor:pointer}
+#nav-list{list-style:none;padding:8px 0;max-height:45vh;overflow:auto}
+#nav-list a{display:flex;gap:12px;text-decoration:none;color:var(--text);padding:10px 18px;border-left:2px solid transparent}
+#nav-list a.active{color:var(--blue);border-left-color:var(--blue);background:rgba(180,142,255,.08)}
+.snum{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);min-width:22px}
+#nav-glos{padding:12px 18px 18px;border-top:1px solid var(--border)}
+#nav-glos-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px;letter-spacing:.12em;text-transform:uppercase}
+#nav-glos-tags{display:flex;gap:6px;flex-wrap:wrap}
+#nav-glos-tags button{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:#000;color:var(--green);cursor:pointer}
+#tooltip{position:fixed;z-index:900;width:300px;background:#000;border:1px solid var(--border2);border-radius:var(--r);display:none;overflow:hidden}
+#tooltip.visible{display:block}
+#tip-head{padding:9px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+#tip-term{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)}
+#tip-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer}
+#tip-body{padding:12px 14px;font-size:14px;line-height:1.6}
+#tip-body em{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);font-style:normal;font-family:'JetBrains Mono',monospace}
+mark.hit{background:rgba(227,179,65,.25);color:var(--text-h);padding:0 2px;border-radius:3px}
+@media (max-width:740px){#quick-search{display:none}.article-wrap{padding:44px 16px 130px}#nav-fab-current{display:none}}
 </style>
 </head>
 <body>
 <div id="bar"></div>
-
-<!-- ТОПБАР -->
 <header id="topbar">
   <div id="topbar-logo">∎ КультВики</div>
-  <div id="topbar-sep">/</div>
-  <div id="topbar-title">Фембой — культурный феномен</div>
-  <div id="topbar-controls">
-    <input id="quick-search" class="tb-input" type="search" placeholder="Поиск по лонгриду…" aria-label="Поиск по статье">
-    <button id="theme-toggle" class="tb-btn" type="button">🌗 Тема</button>
-    <button id="font-plus" class="tb-btn" type="button">A+</button>
-    <button id="font-minus" class="tb-btn" type="button">A-</button>
-    <div id="topbar-time">~12 мин · 18+</div>
+  <div id="switcher">
+    <button class="sw-btn active" style="--sw-color:#6cb6ff" onclick="switchTo('femboy', this)">Фембои: откуда взялись</button>
+    <button class="sw-btn" style="--sw-color:#e3b341" onclick="switchTo('adhd', this)">СДВГ: разбор поста</button>
   </div>
+  <input id="quick-search" type="search" placeholder="Поиск по активному лонгу...">
+  <div id="topbar-time">0%</div>
 </header>
 
-<!-- КОНТЕНТ -->
-<div id="page">
+<div class="page active" id="page-femboy"><div class="article-wrap">
+  <div class="article-header"><div class="cats"><span>Культурология</span><span>Интернет</span><span>История моды</span></div><h1>Откуда вообще взялись фембои и почему их стало так много</h1><div class="article-meta"><span>📖 ~12 минут</span><span>🗓 2026</span><span>18+</span></div></div>
+  <p>Если сидеть в интернете больше пяти минут, рано или поздно натыкаешься на странную вещь. Парень. В юбке. В чулках. И подпись — <span class="term" data-term="femboy">femboy</span>.</p>
+  <section id="f1"><h2><span class="sec-num">01</span> Это не новая штука</h2><p>Идея «женственного мужчины» вообще не новая. История уже много раз это проходила.</p></section>
+  <section id="f2"><h2><span class="sec-num">02</span> Фараоны, каблуки и театр</h2><p>Макияж в древности был нормой и для мужчин, а в кабуки мужчины исполняли женские роли как высокое искусство.</p><blockquote><p>Представления о маскулинности меняются каждые пару столетий.</p></blockquote></section>
+  <section id="f3"><h2><span class="sec-num">03</span> Глэм-рок и андрогинность</h2><p>Боуи, Prince и визуал-кей сделали андрогинность частью мейнстримной поп-культуры.</p></section>
+  <section id="f4"><h2><span class="sec-num">04</span> Япония и бисёнэн</h2><p>Архетип <span class="term" data-term="bishonen">бисёнэн</span> сформировал привычный визуальный язык «красивого юноши».</p></section>
+  <section id="f5"><h2><span class="sec-num">05</span> Когда появился термин</h2><p>Термин femboy вышел из сленга в более нейтральное употребление и закрепился в сетевой культуре.</p></section>
+  <section id="f6"><h2><span class="sec-num">06</span> Алгоритмы и оптический обман</h2><p>Ленты показывают яркие кейсы чаще, чем обычные — поэтому кажется, что «этого слишком много».</p></section>
+  <section id="f7"><h2><span class="sec-num">07</span> Эстетика ≠ идентичность</h2><ul><li>Стиль — это стиль.</li><li>Идентичность — внутреннее самоощущение.</li><li>Ориентация — отдельная ось.</li></ul></section>
+  <section id="f8"><h2><span class="sec-num">08</span> Итог</h2><p>Это старый культурный феномен в новой упаковке: интернет ускорил видимость и спор вокруг него.</p></section>
+</div></div>
 
-  <div class="article-header">
-    <div class="cats">
-      <span>Культурология</span>
-      <span>Интернет</span>
-      <span>История моды</span>
-      <span>Субкультуры</span>
-    </div>
-    <h1>Фембой: культурный феномен</h1>
-    <div class="article-meta">
-      <span>📖 ~12 минут</span>
-      <span>🗓 2024</span>
-      <span>18+</span>
-    </div>
-  </div>
+<div class="page" id="page-adhd"><div class="article-wrap">
+  <div class="article-header"><div class="cats"><span>Нейронаука</span><span>Критика</span><span>Медиаграмотность</span></div><h1>Разбор поста про СДВГ — где эмоции, а где выводы</h1><div class="article-meta"><span>📖 ~8 минут</span><span>🗓 2026</span><span>Мнение</span></div></div>
+  <p>Это реакция на один текст, где личный опыт смешан с псевдо-научной универсальной моделью.</p>
+  <section id="a1"><h2><span class="sec-num">01</span> Что делает текст «умным»</h2><p>Термины, нейробиология и сложные объяснения создают эффект экспертности.</p></section>
+  <section id="a2"><h2><span class="sec-num">02</span> Личный опыт → теория</h2><p>Проблема начинается там, где частный опыт объявляется универсальным законом работы мозга.</p></section>
+  <section id="a3"><h2><span class="sec-num">03</span> Лестница исключительности</h2><p>Набор факторов подаётся как «особый случай», хотя многое — слабые корреляции.</p></section>
+  <section id="a4"><h2><span class="sec-num">04</span> Про РАС и мотивацию</h2><p>Даже при РАС мотивация и поддержка возможны, просто механика обычно сложнее и индивидуальнее.</p></section>
+  <section id="a5"><h2><span class="sec-num">05</span> Воронка доверия</h2><p>Личная боль + сложные термины + «уникальный случай» = вера в готовое решение.</p></section>
+  <section id="a6"><h2><span class="sec-num">06</span> Вывод</h2><p>Важно отделять живой опыт человека от универсальных медицинских заявлений.</p></section>
+</div></div>
 
-  <!-- ИНФОБОКС -->
-  <table class="infobox">
-    <tr><td class="infobox-title" colspan="2">Справка</td></tr>
-    <tr class="infobox-row">
-      <th>Термин</th>
-      <td><span class="term" data-term="femboy">Femboy</span></td>
-    </tr>
-    <tr class="infobox-row">
-      <th>Происхождение</th>
-      <td>Англ. интернет, 1990-е</td>
-    </tr>
-    <tr class="infobox-row">
-      <th>Архетип</th>
-      <td><span class="term" data-term="bishonen">Бисёнэн</span></td>
-    </tr>
-    <tr class="infobox-row">
-      <th>Аналог</th>
-      <td><span class="term" data-term="onnagata">Оннагата</span>, глэм-рок</td>
-    </tr>
-    <tr class="infobox-row">
-      <th>Суть</th>
-      <td>Эстетика, не идентичность</td>
-    </tr>
-  </table>
-
-  <p>Если сидеть в интернете больше пяти минут, рано или поздно натыкаешься на странную вещь. Парень. В юбке. В чулках. Иногда с макияжем. Иногда с кошачьими ушами. Иногда вообще непонятно что происходит. И под этим всем гордая подпись — <span class="term" data-term="femboy">femboy</span>.</p>
-  <p>У половины людей реакция примерно одинаковая — «что это вообще за хрень». Другие делают вид, что это абсолютно нормально и вообще так было всегда. Как обычно — обе стороны немного фантазируют.</p>
-  <p>Правда скучнее, но интереснее. Фембои не появились вчера. Это просто новая упаковка для довольно старой культурной штуки — мужской феминной эстетики.</p>
-
-  <section id="s1">
-    <h2><span class="sec-num">01</span> Что вообще происходит</h2>
-    <p>Фембои не появились вчера. И уж точно их не изобрели тиктокеры. Это просто новая упаковка для довольно старой культурной штуки — мужской феминной эстетики. Чтобы понять, что происходит, нужно откатиться назад. Причём довольно далеко.</p>
-    <p>Обе стороны интернет-дискуссии — те, кто видит в этом «конец цивилизации», и те, кто делает вид, что это абсолютно обычное явление — в равной степени упрощают ситуацию. Реальность, как обычно, требует контекста.</p>
-  </section>
-
-  <section id="s2">
-    <h2><span class="sec-num">02</span> Это не новая штука</h2>
-    <p>Первое, что нужно понять — идея «женственного мужчины» не новая от слова совсем. История регулярно производила такие вещи. Просто каждый раз они назывались иначе и находились люди, которые кричали «это конец нормальности».</p>
-    <p>Потом всё устаканивалось. Потом снова всплывало. Круговорот паники в природе. Работает без сбоев уже несколько тысяч лет.</p>
-    <blockquote><p>Нормы маскулинности — не вечные константы, а исторически изменчивые конструкты, которые пересматривались в каждую эпоху.</p></blockquote>
-  </section>
-
-  <section id="s3">
-    <h2><span class="sec-num">03</span> Фараоны, каблуки и театр</h2>
-    <h3>Древний Египет</h3>
-    <p>Мужчины там поголовно пользовались макияжем. Растирали толчёную минералку — <span class="term" data-term="kohl">кхол</span> — вокруг глаз. Фараоны. Воины. Жрецы. Строители пирамид, вероятно, тоже — просто об этом не осталось фресок.</p>
-    <p>Это была не прихоть. Считалось, что подводка защищает от солнца и злых духов одновременно. Универсальное средство. Если сказать об этом современному интернет-«альфа-самцу», он почувствует <span class="term" data-term="kogdis">когнитивный диссонанс</span> и закроет вкладку.</p>
-    <h3>Театр кабуки, Япония, XVII век</h3>
-    <p>Государство запретило женщинам выступать на сцене. Просто взяло и запретило. Решение было примерно такое же логичное, как все остальные государственные решения в истории. Пришлось выкручиваться.</p>
-    <p>Так появились актёры-<span class="term" data-term="onnagata">оннагата</span> — мужчины, которые профессионально играли женские роли. Причём не просто надевали платье. Они годами учились копировать женскую пластику, голос, манеру движения. Иногда настолько хорошо, что становились эталоном женственности для зрителей.</p>
-    <p>Ирония: государство запретило женщинам быть женственными публично — и само же создало профессию, где мужчины делали это лучше. Блестящий результат. Традиция существует до сих пор — несколько столетий спустя.</p>
-    <h3>Европа, XVII–XVIII век</h3>
-    <p>Откройте портрет европейского аристократа той эпохи. Парики. Каблуки. Чулки. Макияж. Кружево. Всё это на мужчинах. Причём это был не маскарад — это была норма. Признак статуса.</p>
-    <p>Красный каблук ввёл Людовик XIV — Король-Солнце. Носить его могли только аристократы. Простолюдин в красных каблуках — политический скандал. Кстати, каблуки изначально изобрели персидские всадники в X веке — для удобства в стременах. Потом мода дошла до Европы и стала мужской. Потом перешла к женщинам. Вещи мигрируют. Всегда.</p>
-    <blockquote><p>Представления о том, как должен выглядеть мужчина, меняются каждые пару столетий. Сегодня — шкаф из спортзала. В XVIII веке — фарфоровая статуэтка в кружевах на каблуках. Через двести лет будут смеяться над нашими стандартами.</p></blockquote>
-  </section>
-
-  <section id="s4">
-    <h2><span class="sec-num">04</span> Глэм-рок и андрогинность в музыке</h2>
-    <p>В XX веке мужская феминная эстетика всплыла снова. Только уже не в театре — в музыке. Потому что музыка — это новый театр, только громче.</p>
-    <h3>Дэвид Боуи, 1972</h3>
-    <p>Образ Ziggy Stardust — <span class="term" data-term="androgyny">андрогинный</span> инопланетный рок-звезда. Макияж, платья, яркие костюмы, причёски которые физически невозможно описать словами. Боуи продавал пластинки миллионами. Умер национальным сокровищем Великобритании. Никто не называл его фембоем. Его называли гением.</p>
-    <p>Потом был Prince — человек, который носил на сцене всё что хотел, включая вещи, для которых ещё не придумали название. Потом Boy George и Culture Club. Потом целое поколение японских <span class="term" data-term="visualkei">визуал-кей</span> групп — X Japan, Malice Mizer — которые выходили на сцену в образах, перед которыми среднестатистический тиктокер в юбке выглядит сдержанно.</p>
-    <p>Они не называли себя фембоями. Такого слова не было. Но логика была та же — игра с границей между мужским и женским образом. Странность продаётся. Шоу-бизнес это знал всегда.</p>
-  </section>
-
-  <section id="s5">
-    <h2><span class="sec-num">05</span> Япония, аниме и бисёнэн</h2>
-    <p>Самая важная остановка — Япония. Без неё разговор о фембоях неполный примерно наполовину.</p>
-    <p>Если кто-то смотрел аниме, он наверняка замечал один тип персонажей. Очень красивые мальчики. Тонкие черты лица. Длинные волосы. Большие глаза. Мягкая внешность. Иногда вообще непонятно, мальчик это или девочка — и это не баг, это фича.</p>
-    <p>Это называется <span class="term" data-term="bishonen">бисёнэн</span> (美少年) — буквально «красивый юноша». Архетип зародился в манге в 1970-х. Группа художниц «Год 24» — Hagio Moto, Riyoko Ikeda, Keiko Takemiya — создала визуальный язык <span class="term" data-term="androgyny">андрогинной</span> мужской красоты, который потом разошёлся по всей японской поп-культуре.</p>
-    <p>Из манги — в аниме. Из аниме — в J-рок и <span class="term" data-term="visualkei">визуал-кей</span>. Из музыки — в косплей и интернет. <strong>Астолфо</strong> из Fate-серии и <strong>Феликс Аргайл</strong> из Re:Zero стали мемами ещё до того, как слово «фембой» вышло в мейнстрим.</p>
-    <blockquote><p>Интернет — ускоритель странных идей. Берёт нишевую штуку из японской анимации 1970-х, добавляет алгоритмов, и через пятьдесят лет миллионы людей спорят, конец ли это цивилизации.</p></blockquote>
-  </section>
-
-  <section id="s6">
-    <h2><span class="sec-num">06</span> Когда появился термин</h2>
-    <p>Слово <span class="term" data-term="femboy">femboy</span> начало использоваться в англоязычном интернете в конце 90-х — начале 2000-х. Изначально — грубый сленг с пренебрежительным оттенком.</p>
-    <p>Но потом интернет сделал то, что делает лучше всего — превратил оскорбление в категорию. Берёшь оскорбление, люди начинают использовать его сами — иронично или просто потому что удобно. Слово теряет яд. Так было с «гиком». Так было с «задротом». Так произошло здесь.</p>
-    <p>К примерно 2013 году слово стало нейтральным термином. Dictionary.com: «мужчина с явно женственными характеристиками» — без привязки к ориентации. То есть это про внешность. Про стиль.</p>
-  </section>
-
-  <section id="s7">
-    <h2><span class="sec-num">07</span> Интернет, алгоритмы и оптический обман</h2>
-    <p>До интернета такие субкультуры были маленькими и невидимыми. Чтобы встретить человека с таким образом, нужно было попасть в очень конкретную тусовку. Интернет убрал это требование.</p>
-    <p>Алгоритмы работают просто — показывают контент, который вызывает реакцию. Не важно какую. Образ фембоя идеально подходит. Значит алгоритм его распространяет.</p>
-    <p>И вот тут возникает <span class="term" data-term="optobman">оптический обман</span>: алгоритмы показывают самые яркие случаи, поэтому создаётся ощущение «этого везде слишком много». Хотя в реальной жизни процент таких людей — крошечный.</p>
-    <blockquote><p>Интернет не создал фембоев. Он поставил прожектор на то, что и раньше существовало в тени. Разница только в видимости. Но мозг воспринимает видимость как распространённость — и начинает нервничать.</p></blockquote>
-  </section>
-
-  <section id="s8">
-    <h2><span class="sec-num">08</span> Мемы и формула</h2>
-    <p>Когда что-то становится вирусным, происходит неизбежное. Люди начинают повторять. Кто-то ради шутки. Кто-то ради лайков. Кто-то ради денег.</p>
-    <p>Постепенно формируется визуальный шаблон:</p>
-    <ul>
-      <li>Чулки</li>
-      <li>Юбка или oversized худи</li>
-      <li>Пастельные цвета</li>
-      <li>Кошачьи уши</li>
-      <li>Выражение лица «я не понимаю что происходит, но мне комфортно»</li>
-    </ul>
-    <p>Это не правило. Но это узнаваемая формула. Самый известный мем — <strong>Femboy Hooters</strong>: выдуманное заведение, пародия на Hooters, где официантами работают фембои. Стал вирусным в 2019–2020. Механика простая: берёшь узнаваемый контекст, добавляешь неожиданный элемент, получаешь реакцию.</p>
-  </section>
-
-  <section id="s9">
-    <h2><span class="sec-num">09</span> Эстетика ≠ идентичность</h2>
-    <p>Здесь большинство людей путаются. Иногда случайно, иногда намеренно — потому что путаница удобнее для спора. Есть четыре разные вещи, которые постоянно смешивают:</p>
-    <p><strong>Эстетика / стиль.</strong> Выбор образа — не декларация внутреннего устройства. Как готы, как хайп-бисты.</p>
-    <p><strong>Гендерная идентичность.</strong> То, кем человек себя ощущает внутри. Не обязательно связана с одеждой вообще никак.</p>
-    <p><strong>Сексуальная ориентация.</strong> Отдельная переменная. Человек в юбке может быть гетеросексуальным. Это звучит очевидно. Но почему-то приходится повторять каждый раз.</p>
-    <p><strong>Косплей / персонаж.</strong> Огромная часть — просто косплей аниме-персонажей. Актёр, сыгравший злодея, не становится злодеем.</p>
-    <blockquote><p>Видеть фембоя и немедленно приклеивать к нему все ярлыки — примерно как увидеть человека в костюме Бэтмена и решить, что он считает себя летучей мышью. Может, и считает. Но это отдельный вопрос.</p></blockquote>
-  </section>
-
-  <section id="s10">
-    <h2><span class="sec-num">10</span> Почему это раздражает людей</h2>
-    <p>Реакция общества предсказуема. И довольно скучная — потому что она одна и та же уже несколько веков.</p>
-    <p><strong>Причина первая — слом ожиданий.</strong> Мозг любит категории. Когда появляется что-то посередине — начинается зависание. Это не злость. Это <span class="term" data-term="kogdis">когнитивный дискомфорт</span>.</p>
-    <p><strong>Причина вторая — сексуализация образа.</strong> К 2013 году femboy стал отдельной категорией в порно. Когда образ там закрепляется — он начинает ассоциироваться с фетишем даже у людей, которые это порно не смотрят. Информация просачивается.</p>
-    <p><strong>Причина третья — интернет-эффект.</strong> Алгоритмы показывают самые яркие случаи. Всё раздражение примерно пропорционально количеству времени, проведённому в определённых углах интернета.</p>
-  </section>
-
-  <section id="s11">
-    <h2><span class="sec-num">11</span> Российский интернет</h2>
-    <p>В русскоязычном интернете всё происходит немного иначе. Тренды приходят из глобального интернета — он один на всех. Но культурная среда здесь консервативнее.</p>
-    <p>С одной стороны — интерес и мемы. Тема хайповая, люди кликают, шутят, делятся. С другой — агрессивная реакция от людей, которые прекрасно понимают, что такое мем, но публично делают вид, что не понимают. Потому что так удобнее.</p>
-    <p>Половина делает вид, что это конец цивилизации. Вторая — что это абсолютно обычное явление. Правда где-то посередине. Но там нет лайков — поэтому туда никто не идёт.</p>
-  </section>
-
-  <section id="s12">
-    <h2><span class="sec-num">12</span> Итог</h2>
-    <p>Если убрать весь шум, ситуация довольно простая. Есть старый культурный феномен — <span class="term" data-term="androgyny">андрогинная</span> мужская эстетика. С историей в несколько тысяч лет, которую очень удобно забывать, когда хочется возмутиться.</p>
-    <p>Интернет дал ему новое название. Алгоритмы сделали его вирусным. Рынок превратил его в контент. И теперь это выглядит как огромный тренд, хотя по сути — очередная форма старой идеи.</p>
-    <p>Кто-то делает это ради стиля. Кто-то ради внимания. Кто-то ради денег. А большинство людей наблюдает со стороны и пытается понять, что вообще происходит.</p>
-    <blockquote><p>Фембои не появились внезапно. Их не изобрели тиктокеры. Это очередная форма старой культурной идеи, которую интернет упаковал в мем и раздал алгоритмам. Через пару лет появится что-нибудь новое. И все снова будут задавать один и тот же вопрос — «откуда это вообще взялось». Ответ всегда одинаковый. Просто каждый раз приходится объяснять заново.</p></blockquote>
-    <div class="wiki-footer">
-      Если было интересно — плюс в карму.<br>
-      Если хочется поспорить — комментарии снизу, я там.<br>
-      Культурология · Интернет-субкультуры · 2024
-    </div>
-  </section>
-
-</div>
-
-<!-- ══ ПЛАВАЮЩАЯ КНОПКА НАВИГАЦИИ ══ -->
-<div id="nav-fab" role="button" tabindex="0" aria-label="Навигация по статье">
-  <div id="nav-fab-icon">☰</div>
-  <div id="nav-fab-sep"></div>
-  <div>
-    <div id="nav-fab-text">Содержание</div>
-    <div id="nav-fab-current">Начало</div>
-  </div>
-</div>
-
-<!-- ══ ШТОРКА НАВИГАЦИИ ══ -->
-<div id="nav-sheet-overlay"></div>
-<div id="nav-sheet" role="dialog" aria-modal="true">
-  <div id="nav-sheet-handle"></div>
-  <div id="nav-sheet-head">
-    <span id="nav-sheet-title">Содержание</span>
-    <button id="nav-sheet-close">×</button>
-  </div>
-  <ul id="nav-sheet-list">
-    <li><a href="#s1"><span class="snum">01</span>Что вообще происходит</a></li>
-    <li><a href="#s2"><span class="snum">02</span>Это не новая штука</a></li>
-    <li><a href="#s3"><span class="snum">03</span>Фараоны, каблуки и театр</a></li>
-    <li><a href="#s4"><span class="snum">04</span>Глэм-рок и андрогинность</a></li>
-    <li><a href="#s5"><span class="snum">05</span>Япония, аниме и бисёнэн</a></li>
-    <li><a href="#s6"><span class="snum">06</span>Когда появился термин</a></li>
-    <li><a href="#s7"><span class="snum">07</span>Интернет и алгоритмы</a></li>
-    <li><a href="#s8"><span class="snum">08</span>Мемы и формула</a></li>
-    <li><a href="#s9"><span class="snum">09</span>Эстетика ≠ идентичность</a></li>
-    <li><a href="#s10"><span class="snum">10</span>Почему раздражает</a></li>
-    <li><a href="#s11"><span class="snum">11</span>Российский интернет</a></li>
-    <li><a href="#s12"><span class="snum">12</span>Итог</a></li>
-  </ul>
-  <div id="nav-sheet-glos">
-    <div id="nav-sheet-glos-title">Глоссарий — кликни чтобы узнать</div>
-    <div id="nav-sheet-glos-list">
-      <button onclick="openGlos('femboy')">Femboy</button>
-      <button onclick="openGlos('bishonen')">Бисёнэн</button>
-      <button onclick="openGlos('onnagata')">Оннагата</button>
-      <button onclick="openGlos('visualkei')">Визуал-кей</button>
-      <button onclick="openGlos('androgyny')">Андрогинность</button>
-      <button onclick="openGlos('kogdis')">Когн. диссонанс</button>
-      <button onclick="openGlos('kohl')">Кхол</button>
-      <button onclick="openGlos('optobman')">Оптич. обман</button>
-    </div>
-  </div>
-</div>
-
-<!-- ══ ТУЛТИП ══ -->
-<div id="tooltip">
-  <div id="tooltip-head">
-    <span id="tooltip-term"></span>
-    <button id="tooltip-close">×</button>
-  </div>
-  <div id="tooltip-body"></div>
-</div>
+<div id="nav-fab"><div id="nav-fab-icon">☰</div><div><div id="nav-fab-text">Содержание</div><div id="nav-fab-current">Начало</div></div></div>
+<div id="nav-overlay"></div>
+<div id="nav-sheet"><div id="nav-head"><span id="nav-head-title">Содержание</span><button id="nav-close">×</button></div><ul id="nav-list"></ul><div id="nav-glos"><div id="nav-glos-title">Глоссарий</div><div id="nav-glos-tags"></div></div></div>
+<div id="tooltip"><div id="tip-head"><span id="tip-term"></span><button id="tip-close">×</button></div><div id="tip-body"></div></div>
 
 <script>
-/* ═══ ГЛОССАРИЙ ═══ */
-const G = {
-  femboy:    { label:'Femboy', def:'Мужчина с подчёркнуто женственной внешностью. Термин возник в англоязычном интернете в 1990-х как сленг, к 2013 году стал нейтральным. Обозначает эстетику — не ориентацию и не идентичность.', note:'от англ. feminine + boy' },
-  bishonen:  { label:'Бисёнэн (美少年)', def:'Японский архетип «красивого юноши» с андрогинными чертами. Возник в манге 1970-х, стал основой визуального языка аниме и J-рока. Прямой культурный предок фембой-эстетики на Западе.', note:'яп. 美少年 — буквально «красивый юноша»' },
-  onnagata:  { label:'Оннагата (女形)', def:'Актёры японского театра кабуки, исполняющие женские роли. Традиция возникла в XVII веке после государственного запрета на участие женщин в театре. Существует до сих пор.', note:'яп. 女形 — «женская форма/образ»' },
-  visualkei: { label:'Визуал-кей (ヴィジュアル系)', def:'Японское музыкальное движение 1980–90-х. Группы делали акцент на театральном образе: макияж, женственная одежда, экстравагантные причёски. X Japan, Malice Mizer — классические примеры.', note:'яп. ヴィジュアル系 — «визуальный стиль»' },
-  androgyny: { label:'Андрогинность', def:'Сочетание мужских и женских черт во внешности или поведении. Эстетический выбор, а не биологическая или психологическая характеристика. Встречается в искусстве с античных времён.', note:'от греч. ἀνδρόγυνος — мужчина + женщина' },
-  kogdis:    { label:'Когнитивный диссонанс', def:'Психологический дискомфорт, возникающий при столкновении с информацией, противоречащей устоявшимся убеждениям. В данном контексте — реакция мозга на нарушение привычных гендерных категорий.', note:'термин введён Леоном Фестингером в 1957 году' },
-  kohl:      { label:'Кхол (Kohl)', def:'Косметическое средство из Древнего Египта — порошок на основе сурьмы или галенита. Наносился вокруг глаз мужчинами и женщинами. Считался защитой от солнца и злых духов.', note:'использовался в Египте с ~3100 до н.э.' },
-  optobman:  { label:'Оптический обман (соц.)', def:'Эффект, при котором алгоритмическое усиление редких явлений создаёт ложное ощущение их массовости. Мозг воспринимает частоту в ленте как частоту в реальной жизни — хотя это не одно и то же.', note:'следствие алгоритмов вовлечённости соцсетей' }
+const G={
+  femboy:{label:'Femboy',def:'Мужчина с подчёркнуто женственной эстетикой.',note:'стиль, а не ориентация'},
+  bishonen:{label:'Бисёнэн',def:'Японский архетип «красивого юноши» с андрогинными чертами.',note:'美少年'}
 };
-
-/* ═══ ТУЛТИП ═══ */
-const tooltip  = document.getElementById('tooltip');
-const tipTerm  = document.getElementById('tooltip-term');
-const tipBody  = document.getElementById('tooltip-body');
-const tipClose = document.getElementById('tooltip-close');
-
-function showTooltip(key, e) {
-  const d = G[key]; if (!d) return;
-  tipTerm.textContent = d.label;
-  tipBody.innerHTML = d.def + (d.note ? `<em>${d.note}</em>` : '');
-  tooltip.classList.add('visible');
-  if (e) {
-    const tw = 300, th = 160, vw = window.innerWidth, vh = window.innerHeight;
-    let x = e.clientX + 14, y = e.clientY + 14;
-    if (x + tw > vw - 12) x = e.clientX - tw - 8;
-    if (y + th > vh - 12) y = e.clientY - th - 8;
-    tooltip.style.left = Math.max(8, x) + 'px';
-    tooltip.style.top  = Math.max(8, y) + 'px';
-  }
-}
-
-function openGlos(key) {
-  closeSheet();
-  setTimeout(() => {
-    const center = { clientX: window.innerWidth/2, clientY: window.innerHeight/2 };
-    showTooltip(key, center);
-  }, 320);
-}
-
-tipClose.addEventListener('click', () => tooltip.classList.remove('visible'));
-document.addEventListener('click', e => {
-  if (!tooltip.contains(e.target) && !e.target.classList.contains('term'))
-    tooltip.classList.remove('visible');
-});
-document.querySelectorAll('.term').forEach(el => {
-  el.addEventListener('click', e => { e.stopPropagation(); showTooltip(el.dataset.term, e); });
-});
-
-/* ═══ ПЛАВАЮЩАЯ НАВИГАЦИЯ ═══ */
-const fab      = document.getElementById('nav-fab');
-const overlay  = document.getElementById('nav-sheet-overlay');
-const sheet    = document.getElementById('nav-sheet');
-const shClose  = document.getElementById('nav-sheet-close');
-const fabCur   = document.getElementById('nav-fab-current');
-
-function openSheet()  { sheet.classList.add('open'); overlay.classList.add('open'); }
-function closeSheet() { sheet.classList.remove('open'); overlay.classList.remove('open'); }
-
-fab.addEventListener('click', openSheet);
-fab.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openSheet(); });
-shClose.addEventListener('click', closeSheet);
-overlay.addEventListener('click', closeSheet);
-
-document.getElementById('nav-sheet-list').querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', closeSheet);
-});
-
-
-/* ═══ НОВЫЕ ФУНКЦИИ UI ═══ */
-const root = document.documentElement;
-const searchInput = document.getElementById('quick-search');
-const themeToggle = document.getElementById('theme-toggle');
-const fontPlus = document.getElementById('font-plus');
-const fontMinus = document.getElementById('font-minus');
-
-let baseSize = Number(localStorage.getItem('fontSizePx') || 18);
-document.body.style.fontSize = baseSize + 'px';
-
-const savedTheme = localStorage.getItem('theme') || 'dark';
-if (savedTheme === 'light') root.setAttribute('data-theme', 'light');
-
-themeToggle.addEventListener('click', () => {
-  const isLight = root.getAttribute('data-theme') === 'light';
-  if (isLight) {
-    root.removeAttribute('data-theme');
-    localStorage.setItem('theme', 'dark');
-  } else {
-    root.setAttribute('data-theme', 'light');
-    localStorage.setItem('theme', 'light');
-  }
-});
-
-fontPlus.addEventListener('click', () => {
-  baseSize = Math.min(baseSize + 1, 23);
-  document.body.style.fontSize = baseSize + 'px';
-  localStorage.setItem('fontSizePx', baseSize);
-});
-
-fontMinus.addEventListener('click', () => {
-  baseSize = Math.max(baseSize - 1, 15);
-  document.body.style.fontSize = baseSize + 'px';
-  localStorage.setItem('fontSizePx', baseSize);
-});
-
-function clearMarks() {
-  document.querySelectorAll('mark.mark-hit').forEach(mark => {
-    const parent = mark.parentNode;
-    parent.replaceChild(document.createTextNode(mark.textContent), mark);
-    parent.normalize();
-  });
-}
-
-function highlightInElement(el, regex) {
-  const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
-    acceptNode(node) {
-      if (!node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-      if (node.parentElement?.closest('mark.mark-hit')) return NodeFilter.FILTER_REJECT;
-      return NodeFilter.FILTER_ACCEPT;
-    }
-  });
-
-  const textNodes = [];
-  while (walker.nextNode()) textNodes.push(walker.currentNode);
-
-  let matched = false;
-  textNodes.forEach(node => {
-    const text = node.nodeValue;
-    regex.lastIndex = 0;
-    if (!regex.test(text)) return;
-
-    matched = true;
-    regex.lastIndex = 0;
-
-    const frag = document.createDocumentFragment();
-    let last = 0;
-
-    text.replace(regex, (m, offset) => {
-      if (offset > last) frag.appendChild(document.createTextNode(text.slice(last, offset)));
-      const mark = document.createElement('mark');
-      mark.className = 'mark-hit';
-      mark.textContent = m;
-      frag.appendChild(mark);
-      last = offset + m.length;
-      return m;
-    });
-
-    if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
-    node.parentNode.replaceChild(frag, node);
-  });
-
-  return matched;
-}
-
-searchInput.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    searchInput.value = '';
-    clearMarks();
-    return;
-  }
-  if (e.key !== 'Enter') return;
-
-  clearMarks();
-  const q = searchInput.value.trim();
-  if (!q) return;
-
-  const rx = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
-  const nodes = document.querySelectorAll('#page p, #page h2, #page h3, #page li, #page blockquote p');
-
-  let first = null;
-  nodes.forEach(el => {
-    if (highlightInElement(el, rx) && !first) first = el;
-  });
-
-  if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-});
-
-/* ═══ ПРОГРЕСС + АКТИВНЫЙ РАЗДЕЛ ═══ */
-const bar = document.getElementById('bar');
-const sections = document.querySelectorAll('section[id]');
-const shLinks  = document.querySelectorAll('#nav-sheet-list a');
-
-const LABELS = {
-  s1:'Что вообще происходит', s2:'Не новая штука', s3:'Фараоны, каблуки и театр',
-  s4:'Глэм-рок', s5:'Япония и бисёнэн', s6:'Когда появился термин',
-  s7:'Интернет и алгоритмы', s8:'Мемы и формула', s9:'Эстетика ≠ идентичность',
-  s10:'Почему раздражает', s11:'Российский интернет', s12:'Итог'
+const ARTICLES={
+  femboy:{sections:[{id:'f1',label:'Это не новая штука'},{id:'f2',label:'Фараоны, каблуки и театр'},{id:'f3',label:'Глэм-рок и андрогинность'},{id:'f4',label:'Япония и бисёнэн'},{id:'f5',label:'Когда появился термин'},{id:'f6',label:'Алгоритмы и оптический обман'},{id:'f7',label:'Эстетика ≠ идентичность'},{id:'f8',label:'Итог'}],glos:['femboy','bishonen']},
+  adhd:{sections:[{id:'a1',label:'Что делает текст «умным»'},{id:'a2',label:'Личный опыт → теория'},{id:'a3',label:'Лестница исключительности'},{id:'a4',label:'Про РАС и мотивацию'},{id:'a5',label:'Воронка доверия'},{id:'a6',label:'Вывод'}],glos:[]}
 };
+let currentArticle='femboy'; let observer=null;
 
-window.addEventListener('scroll', () => {
-  const h = document.documentElement;
-  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+function switchTo(id,btn){
+  clearSearch();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentArticle=id; buildNav(); rebindObserver(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildNav(){
+  const art=ARTICLES[currentArticle], list=document.getElementById('nav-list');
+  list.innerHTML=art.sections.map((s,i)=>`<li><a href="#${s.id}"><span class="snum">${String(i+1).padStart(2,'0')}</span>${s.label}</a></li>`).join('');
+  list.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeSheet));
+  const tags=document.getElementById('nav-glos-tags');
+  tags.innerHTML=art.glos.map(k=>`<button onclick="openGlos('${k}')">${G[k]?.label||k}</button>`).join('');
+}
+
+const fab=document.getElementById('nav-fab'),overlay=document.getElementById('nav-overlay'),sheet=document.getElementById('nav-sheet'),nclose=document.getElementById('nav-close');
+function openSheet(){sheet.classList.add('open');overlay.classList.add('open')} function closeSheet(){sheet.classList.remove('open');overlay.classList.remove('open')}
+fab.addEventListener('click',openSheet); nclose.addEventListener('click',closeSheet); overlay.addEventListener('click',closeSheet);
+
+const tooltip=document.getElementById('tooltip'),tipTerm=document.getElementById('tip-term'),tipBody=document.getElementById('tip-body');
+function showTooltip(key,e){const d=G[key]; if(!d) return; tipTerm.textContent=d.label; tipBody.innerHTML=d.def+(d.note?`<em>${d.note}</em>`:''); tooltip.classList.add('visible'); let x=e?.clientX||window.innerWidth/2,y=e?.clientY||window.innerHeight/2; tooltip.style.left=Math.max(8,Math.min(x+14,window.innerWidth-312))+'px'; tooltip.style.top=Math.max(8,Math.min(y+14,window.innerHeight-180))+'px';}
+function openGlos(key){closeSheet(); setTimeout(()=>showTooltip(key),280)}
+document.getElementById('tip-close').addEventListener('click',()=>tooltip.classList.remove('visible'));
+document.addEventListener('click',e=>{if(!tooltip.contains(e.target)&&!e.target.classList.contains('term')) tooltip.classList.remove('visible')});
+document.querySelectorAll('.term').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation(); showTooltip(el.dataset.term,e)}));
+
+function rebindObserver(){
+  if(observer) observer.disconnect();
+  const page=document.querySelector('.page.active'); if(!page) return;
+  const secs=page.querySelectorAll('section[id]'); const labels={}; ARTICLES[currentArticle].sections.forEach(s=>labels[s.id]=s.label);
+  observer=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){document.querySelectorAll('#nav-list a').forEach(l=>l.classList.remove('active')); const a=document.querySelector(`#nav-list a[href="#${en.target.id}"]`); if(a) a.classList.add('active'); document.getElementById('nav-fab-current').textContent=labels[en.target.id]||'Начало';}})},{rootMargin:'-15% 0px -75% 0px'});
+  secs.forEach(s=>observer.observe(s));
+}
+
+const bar=document.getElementById('bar');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement; const p=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100; bar.style.width=p+'%';
+  document.getElementById('topbar-time').textContent=(isFinite(p)?Math.round(p):0)+'%';
 });
 
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      shLinks.forEach(l => l.classList.remove('active'));
-      const id = e.target.id;
-      const active = document.querySelector(`#nav-sheet-list a[href="#${id}"]`);
-      if (active) active.classList.add('active');
-      fabCur.textContent = LABELS[id] || '';
-    }
-  });
-}, { rootMargin: '-15% 0px -75% 0px' });
+// НОВАЯ ФУНКЦИЯ: поиск по активному лонгу (Enter)
+const search=document.getElementById('quick-search');
+function clearSearch(){document.querySelectorAll('mark.hit').forEach(m=>{const p=m.parentNode; p.replaceChild(document.createTextNode(m.textContent),m); p.normalize();});}
+function highlightIn(el,re){const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let n,found=false; const arr=[]; while((n=w.nextNode())) arr.push(n); arr.forEach(node=>{const t=node.nodeValue; re.lastIndex=0; if(!re.test(t)) return; found=true; re.lastIndex=0; const f=document.createDocumentFragment(); let last=0; t.replace(re,(m,off)=>{if(off>last) f.appendChild(document.createTextNode(t.slice(last,off))); const mk=document.createElement('mark'); mk.className='hit'; mk.textContent=m; f.appendChild(mk); last=off+m.length; return m;}); if(last<t.length) f.appendChild(document.createTextNode(t.slice(last))); node.parentNode.replaceChild(f,node);}); return found;}
+search.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){search.value=''; clearSearch(); return;}
+  if(e.key!=='Enter') return;
+  clearSearch(); const q=search.value.trim(); if(!q) return;
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const page=document.querySelector('.page.active'); const nodes=page.querySelectorAll('p,h2,h3,li');
+  let first=null; nodes.forEach(el=>{if(highlightIn(el,re)&&!first) first=el}); if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+});
 
-sections.forEach(s => io.observe(s));
+buildNav(); rebindObserver();
 </script>
 </body>
 </html>
