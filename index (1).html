@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КультВики — Лонгриды</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#000; --border:#1e1e1e; --border2:#2a2a2a;
+  --text:#d4cce8; --text-h:#f0ecff; --text-dim:#9080b8;
+  --blue:#b48eff; --green:#7ee787; --amber:#e3b341; --r:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#000;color:var(--text);font-family:'Source Serif 4',serif;font-size:18px;line-height:1.9}
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,#7c3aed,var(--blue));z-index:999}
+#topbar{position:fixed;top:0;left:0;right:0;height:44px;background:#000;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 14px;z-index:300}
+#topbar-logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blue);flex-shrink:0}
+#switcher{display:flex;gap:2px;flex:1;overflow:auto;scrollbar-width:none}
+#switcher::-webkit-scrollbar{display:none}
+.sw-btn{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);background:none;border:none;padding:6px 10px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.sw-btn.active{color:var(--text-h);border-bottom-color:var(--sw-color,var(--blue))}
+#quick-search{width:180px;background:#000;border:1px solid var(--border2);border-radius:14px;padding:5px 10px;color:var(--text);font-size:11px;font-family:'JetBrains Mono',monospace}
+#topbar-time{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);min-width:76px;text-align:right}
+.page{display:none;padding-top:44px}
+.page.active{display:block}
+.article-wrap{max-width:740px;margin:0 auto;padding:52px 28px 140px}
+.article-header{margin-bottom:34px;padding-bottom:22px;border-bottom:1px solid var(--border)}
+.cats{display:flex;gap:6px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:14px}
+.cats span{padding:3px 9px;border:1px solid var(--border);border-radius:3px}
+h1{font-size:clamp(26px,4.5vw,48px);line-height:1.15;color:var(--text-h);margin-bottom:16px}
+.article-meta{display:flex;gap:6px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim)}
+.article-meta span{border:1px solid var(--border);border-radius:20px;padding:4px 10px}
+section{padding-top:44px;scroll-margin-top:60px}
+h2{font-size:21px;color:var(--text-h);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border);display:flex;gap:10px}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim)}
+h3{font-size:17px;color:var(--text-h);margin:24px 0 8px}
+p{margin-bottom:14px}
+blockquote{margin:22px 0;padding:14px 16px;border-left:3px solid #4a4070;background:#000;border-radius:0 var(--r) var(--r) 0}
+blockquote p{font-style:italic;color:var(--text-h);margin:0}
+ul{list-style:none;margin:12px 0 16px;border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+li{padding:9px 14px 9px 32px;border-bottom:1px solid var(--border);position:relative}
+li:last-child{border-bottom:none}
+li::before{content:'›';position:absolute;left:12px;color:var(--blue)}
+.term{color:var(--green);border-bottom:1px dashed rgba(126,231,135,.4);cursor:pointer}
+#nav-fab{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:500;display:flex;align-items:center;gap:10px;background:#111;border:1px solid var(--border2);border-radius:28px;padding:10px 16px;cursor:pointer}
+#nav-fab-icon{width:28px;height:28px;border-radius:50%;background:#7c3aed;display:flex;align-items:center;justify-content:center}
+#nav-fab-text{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-h)}
+#nav-fab-current{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);max-width:170px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;opacity:0;pointer-events:none;transition:.2s}
+#nav-overlay.open{opacity:1;pointer-events:all}
+#nav-sheet{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(100%);width:min(540px,100vw);background:#000;border:1px solid var(--border2);border-bottom:none;border-radius:16px 16px 0 0;z-index:700;transition:.25s}
+#nav-sheet.open{transform:translateX(-50%) translateY(0)}
+#nav-head{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
+#nav-head-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase}
+#nav-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);background:#000;color:var(--text-dim);cursor:pointer}
+#nav-list{list-style:none;padding:8px 0;max-height:45vh;overflow:auto}
+#nav-list a{display:flex;gap:12px;text-decoration:none;color:var(--text);padding:10px 18px;border-left:2px solid transparent}
+#nav-list a.active{color:var(--blue);border-left-color:var(--blue);background:rgba(180,142,255,.08)}
+.snum{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);min-width:22px}
+#nav-glos{padding:12px 18px 18px;border-top:1px solid var(--border)}
+#nav-glos-title{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:8px;letter-spacing:.12em;text-transform:uppercase}
+#nav-glos-tags{display:flex;gap:6px;flex-wrap:wrap}
+#nav-glos-tags button{padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:#000;color:var(--green);cursor:pointer}
+#tooltip{position:fixed;z-index:900;width:300px;background:#000;border:1px solid var(--border2);border-radius:var(--r);display:none;overflow:hidden}
+#tooltip.visible{display:block}
+#tip-head{padding:9px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+#tip-term{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--green)}
+#tip-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer}
+#tip-body{padding:12px 14px;font-size:14px;line-height:1.6}
+#tip-body em{display:block;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:11px;color:var(--text-dim);font-style:normal;font-family:'JetBrains Mono',monospace}
+mark.hit{background:rgba(227,179,65,.25);color:var(--text-h);padding:0 2px;border-radius:3px}
+@media (max-width:740px){#quick-search{display:none}.article-wrap{padding:44px 16px 130px}#nav-fab-current{display:none}}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<header id="topbar">
+  <div id="topbar-logo">∎ КультВики</div>
+  <div id="switcher">
+    <button class="sw-btn active" style="--sw-color:#6cb6ff" onclick="switchTo('femboy', this)">Фембои: откуда взялись</button>
+    <button class="sw-btn" style="--sw-color:#e3b341" onclick="switchTo('adhd', this)">СДВГ: разбор поста</button>
+  </div>
+  <input id="quick-search" type="search" placeholder="Поиск по активному лонгу...">
+  <div id="topbar-time">0%</div>
+</header>
+
+<div class="page active" id="page-femboy"><div class="article-wrap">
+  <div class="article-header"><div class="cats"><span>Культурология</span><span>Интернет</span><span>История моды</span></div><h1>Откуда вообще взялись фембои и почему их стало так много</h1><div class="article-meta"><span>📖 ~12 минут</span><span>🗓 2026</span><span>18+</span></div></div>
+  <p>Если сидеть в интернете больше пяти минут, рано или поздно натыкаешься на странную вещь. Парень. В юбке. В чулках. И подпись — <span class="term" data-term="femboy">femboy</span>.</p>
+  <section id="f1"><h2><span class="sec-num">01</span> Это не новая штука</h2><p>Идея «женственного мужчины» вообще не новая. История уже много раз это проходила.</p></section>
+  <section id="f2"><h2><span class="sec-num">02</span> Фараоны, каблуки и театр</h2><p>Макияж в древности был нормой и для мужчин, а в кабуки мужчины исполняли женские роли как высокое искусство.</p><blockquote><p>Представления о маскулинности меняются каждые пару столетий.</p></blockquote></section>
+  <section id="f3"><h2><span class="sec-num">03</span> Глэм-рок и андрогинность</h2><p>Боуи, Prince и визуал-кей сделали андрогинность частью мейнстримной поп-культуры.</p></section>
+  <section id="f4"><h2><span class="sec-num">04</span> Япония и бисёнэн</h2><p>Архетип <span class="term" data-term="bishonen">бисёнэн</span> сформировал привычный визуальный язык «красивого юноши».</p></section>
+  <section id="f5"><h2><span class="sec-num">05</span> Когда появился термин</h2><p>Термин femboy вышел из сленга в более нейтральное употребление и закрепился в сетевой культуре.</p></section>
+  <section id="f6"><h2><span class="sec-num">06</span> Алгоритмы и оптический обман</h2><p>Ленты показывают яркие кейсы чаще, чем обычные — поэтому кажется, что «этого слишком много».</p></section>
+  <section id="f7"><h2><span class="sec-num">07</span> Эстетика ≠ идентичность</h2><ul><li>Стиль — это стиль.</li><li>Идентичность — внутреннее самоощущение.</li><li>Ориентация — отдельная ось.</li></ul></section>
+  <section id="f8"><h2><span class="sec-num">08</span> Итог</h2><p>Это старый культурный феномен в новой упаковке: интернет ускорил видимость и спор вокруг него.</p></section>
+</div></div>
+
+<div class="page" id="page-adhd"><div class="article-wrap">
+  <div class="article-header"><div class="cats"><span>Нейронаука</span><span>Критика</span><span>Медиаграмотность</span></div><h1>Разбор поста про СДВГ — где эмоции, а где выводы</h1><div class="article-meta"><span>📖 ~8 минут</span><span>🗓 2026</span><span>Мнение</span></div></div>
+  <p>Это реакция на один текст, где личный опыт смешан с псевдо-научной универсальной моделью.</p>
+  <section id="a1"><h2><span class="sec-num">01</span> Что делает текст «умным»</h2><p>Термины, нейробиология и сложные объяснения создают эффект экспертности.</p></section>
+  <section id="a2"><h2><span class="sec-num">02</span> Личный опыт → теория</h2><p>Проблема начинается там, где частный опыт объявляется универсальным законом работы мозга.</p></section>
+  <section id="a3"><h2><span class="sec-num">03</span> Лестница исключительности</h2><p>Набор факторов подаётся как «особый случай», хотя многое — слабые корреляции.</p></section>
+  <section id="a4"><h2><span class="sec-num">04</span> Про РАС и мотивацию</h2><p>Даже при РАС мотивация и поддержка возможны, просто механика обычно сложнее и индивидуальнее.</p></section>
+  <section id="a5"><h2><span class="sec-num">05</span> Воронка доверия</h2><p>Личная боль + сложные термины + «уникальный случай» = вера в готовое решение.</p></section>
+  <section id="a6"><h2><span class="sec-num">06</span> Вывод</h2><p>Важно отделять живой опыт человека от универсальных медицинских заявлений.</p></section>
+</div></div>
+
+<div id="nav-fab"><div id="nav-fab-icon">☰</div><div><div id="nav-fab-text">Содержание</div><div id="nav-fab-current">Начало</div></div></div>
+<div id="nav-overlay"></div>
+<div id="nav-sheet"><div id="nav-head"><span id="nav-head-title">Содержание</span><button id="nav-close">×</button></div><ul id="nav-list"></ul><div id="nav-glos"><div id="nav-glos-title">Глоссарий</div><div id="nav-glos-tags"></div></div></div>
+<div id="tooltip"><div id="tip-head"><span id="tip-term"></span><button id="tip-close">×</button></div><div id="tip-body"></div></div>
+
+<script>
+const G={
+  femboy:{label:'Femboy',def:'Мужчина с подчёркнуто женственной эстетикой.',note:'стиль, а не ориентация'},
+  bishonen:{label:'Бисёнэн',def:'Японский архетип «красивого юноши» с андрогинными чертами.',note:'美少年'}
+};
+const ARTICLES={
+  femboy:{sections:[{id:'f1',label:'Это не новая штука'},{id:'f2',label:'Фараоны, каблуки и театр'},{id:'f3',label:'Глэм-рок и андрогинность'},{id:'f4',label:'Япония и бисёнэн'},{id:'f5',label:'Когда появился термин'},{id:'f6',label:'Алгоритмы и оптический обман'},{id:'f7',label:'Эстетика ≠ идентичность'},{id:'f8',label:'Итог'}],glos:['femboy','bishonen']},
+  adhd:{sections:[{id:'a1',label:'Что делает текст «умным»'},{id:'a2',label:'Личный опыт → теория'},{id:'a3',label:'Лестница исключительности'},{id:'a4',label:'Про РАС и мотивацию'},{id:'a5',label:'Воронка доверия'},{id:'a6',label:'Вывод'}],glos:[]}
+};
+let currentArticle='femboy'; let observer=null;
+
+function switchTo(id,btn){
+  clearSearch();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sw-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentArticle=id; buildNav(); rebindObserver(); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function buildNav(){
+  const art=ARTICLES[currentArticle], list=document.getElementById('nav-list');
+  list.innerHTML=art.sections.map((s,i)=>`<li><a href="#${s.id}"><span class="snum">${String(i+1).padStart(2,'0')}</span>${s.label}</a></li>`).join('');
+  list.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeSheet));
+  const tags=document.getElementById('nav-glos-tags');
+  tags.innerHTML=art.glos.map(k=>`<button onclick="openGlos('${k}')">${G[k]?.label||k}</button>`).join('');
+}
+
+const fab=document.getElementById('nav-fab'),overlay=document.getElementById('nav-overlay'),sheet=document.getElementById('nav-sheet'),nclose=document.getElementById('nav-close');
+function openSheet(){sheet.classList.add('open');overlay.classList.add('open')} function closeSheet(){sheet.classList.remove('open');overlay.classList.remove('open')}
+fab.addEventListener('click',openSheet); nclose.addEventListener('click',closeSheet); overlay.addEventListener('click',closeSheet);
+
+const tooltip=document.getElementById('tooltip'),tipTerm=document.getElementById('tip-term'),tipBody=document.getElementById('tip-body');
+function showTooltip(key,e){const d=G[key]; if(!d) return; tipTerm.textContent=d.label; tipBody.innerHTML=d.def+(d.note?`<em>${d.note}</em>`:''); tooltip.classList.add('visible'); let x=e?.clientX||window.innerWidth/2,y=e?.clientY||window.innerHeight/2; tooltip.style.left=Math.max(8,Math.min(x+14,window.innerWidth-312))+'px'; tooltip.style.top=Math.max(8,Math.min(y+14,window.innerHeight-180))+'px';}
+function openGlos(key){closeSheet(); setTimeout(()=>showTooltip(key),280)}
+document.getElementById('tip-close').addEventListener('click',()=>tooltip.classList.remove('visible'));
+document.addEventListener('click',e=>{if(!tooltip.contains(e.target)&&!e.target.classList.contains('term')) tooltip.classList.remove('visible')});
+document.querySelectorAll('.term').forEach(el=>el.addEventListener('click',e=>{e.stopPropagation(); showTooltip(el.dataset.term,e)}));
+
+function rebindObserver(){
+  if(observer) observer.disconnect();
+  const page=document.querySelector('.page.active'); if(!page) return;
+  const secs=page.querySelectorAll('section[id]'); const labels={}; ARTICLES[currentArticle].sections.forEach(s=>labels[s.id]=s.label);
+  observer=new IntersectionObserver(entries=>{entries.forEach(en=>{if(en.isIntersecting){document.querySelectorAll('#nav-list a').forEach(l=>l.classList.remove('active')); const a=document.querySelector(`#nav-list a[href="#${en.target.id}"]`); if(a) a.classList.add('active'); document.getElementById('nav-fab-current').textContent=labels[en.target.id]||'Начало';}})},{rootMargin:'-15% 0px -75% 0px'});
+  secs.forEach(s=>observer.observe(s));
+}
+
+const bar=document.getElementById('bar');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement; const p=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100; bar.style.width=p+'%';
+  document.getElementById('topbar-time').textContent=(isFinite(p)?Math.round(p):0)+'%';
+});
+
+// НОВАЯ ФУНКЦИЯ: поиск по активному лонгу (Enter)
+const search=document.getElementById('quick-search');
+function clearSearch(){document.querySelectorAll('mark.hit').forEach(m=>{const p=m.parentNode; p.replaceChild(document.createTextNode(m.textContent),m); p.normalize();});}
+function highlightIn(el,re){const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT); let n,found=false; const arr=[]; while((n=w.nextNode())) arr.push(n); arr.forEach(node=>{const t=node.nodeValue; re.lastIndex=0; if(!re.test(t)) return; found=true; re.lastIndex=0; const f=document.createDocumentFragment(); let last=0; t.replace(re,(m,off)=>{if(off>last) f.appendChild(document.createTextNode(t.slice(last,off))); const mk=document.createElement('mark'); mk.className='hit'; mk.textContent=m; f.appendChild(mk); last=off+m.length; return m;}); if(last<t.length) f.appendChild(document.createTextNode(t.slice(last))); node.parentNode.replaceChild(f,node);}); return found;}
+search.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){search.value=''; clearSearch(); return;}
+  if(e.key!=='Enter') return;
+  clearSearch(); const q=search.value.trim(); if(!q) return;
+  const re=new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'gi');
+  const page=document.querySelector('.page.active'); const nodes=page.querySelectorAll('p,h2,h3,li');
+  let first=null; nodes.forEach(el=>{if(highlightIn(el,re)&&!first) first=el}); if(first) first.scrollIntoView({behavior:'smooth',block:'center'});
+});
+
+buildNav(); rebindObserver();
+</script>
+</body>
+</html>
