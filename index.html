@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>КультВики — Лонгриды</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #000000;
+  --bg2:      #000000;
+  --bg3:      #000000;
+  --bg4:      #000000;
+  --border:   #1e1e1e;
+  --border2:  #2a2a2a;
+  --text:     #d4cce8;
+  --text-h:   #f0ecff;
+  --text-dim: #9080b8;
+  --blue:     #b48eff;
+  --green:    #7ee787;
+  --green2:   #3fb950;
+  --amber:    #e3b341;
+  --r:        8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+    color: var(--text);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ══ ПРОГРЕСС ══ */
+#bar {
+  position: fixed; top: 0; left: 0;
+  height: 2px; width: 0;
+  background: linear-gradient(90deg, #7c3aed, var(--blue));
+  z-index: 999;
+  transition: width .08s linear;
+  box-shadow: 0 0 8px rgba(180,142,255,.3);
+}
+
+/* ══ ТОПБАР ══ */
+#topbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 44px;
+  background: #000000;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 0;
+  z-index: 300;
+}
+
+#topbar-logo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--blue);
+  letter-spacing: .04em;
+  flex-shrink: 0;
+  margin-right: 16px;
+}
+
+/* ══ ПЕРЕКЛЮЧАТЕЛЬ ЛОНГОВ ══ */
+#switcher {
+  display: flex;
+  gap: 2px;
+  flex: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#switcher::-webkit-scrollbar { display: none; }
+
+.sw-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  padding: 6px 14px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color .15s, border-color .15s, background .15s;
+  border-radius: 4px 4px 0 0;
+}
+
+.sw-btn:hover { color: var(--text); background: transparent; }
+
+.sw-btn.active {
+  color: var(--text-h);
+  border-bottom-color: var(--sw-color, var(--blue));
+  background: transparent;
+}
+
+#topbar-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+/* ══ СТРАНИЦЫ ══ */
+.page { display: none; padding-top: 44px; }
+.page.active { display: block; }
+
+/* ══ КОНТЕНТ ══ */
+.article-wrap {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 52px 28px 160px;
+}
+
+/* ══ ХЕДЕР ══ */
+.article-header {
+  margin-bottom: 40px;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cats {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.cats span {
+  padding: 3px 9px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  transition: border-color .2s;
+}
+.cats span:hover { border-color: var(--border2); }
+
+h1 {
+  font-size: clamp(26px, 4.5vw, 48px);
+  font-weight: 600;
+  color: var(--text-h);
+  line-height: 1.12;
+  letter-spacing: -.02em;
+  margin-bottom: 20px;
+}
+
+.article-meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+}
+
+.article-meta span {
+  padding: 4px 10px;
+  background: #000000;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+/* ══ ИНФОБОКС ══ */
+.infobox {
+  float: right;
+  clear: right;
+  margin: 0 0 28px 32px;
+  width: 240px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: #000000;
+  overflow: hidden;
+  font-size: 13px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.3);
+}
+
+.infobox-title {
+  background: #000000;
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  text-align: center;
+}
+
+.infobox-row { display: flex; border-bottom: 1px solid var(--border); }
+.infobox-row:last-child { border-bottom: none; }
+
+.infobox-row th {
+  width: 42%; padding: 8px 10px;
+  font-weight: 400; color: var(--text-dim); font-size: 12px;
+  border-right: 1px solid var(--border); vertical-align: top;
+  background: transparent;
+}
+
+.infobox-row td {
+  padding: 8px 10px; color: var(--text);
+  vertical-align: top; line-height: 1.5;
+}
+
+/* ══ СЕКЦИИ ══ */
+section { padding-top: 48px; scroll-margin-top: 60px; }
+
+h2 {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 1.3;
+}
+
+h2 .sec-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 28px 0 10px;
+}
+
+p { margin-bottom: 16px; }
+strong { color: var(--text-h); font-weight: 600; }
+
+blockquote {
+  margin: 28px 0;
+  padding: 18px 20px 18px 18px;
+  background: #000000;
+  border-left: 3px solid var(--border2);
+  border-radius: 0 var(--r) var(--r) 0;
+  box-shadow: inset 0 0 0 1px transparent;
+}
+
+blockquote p {
+  font-size: 17px;
+  font-style: italic;
+  color: var(--text-h);
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* ══ СПИСОК ══ */
+ul {
+  list-style: none;
+  margin: 14px 0 18px;
+  background: #000000;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+ul li {
+  padding: 10px 16px 10px 36px;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  font-size: 16px;
+  transition: background .15s;
+}
+
+ul li:last-child { border-bottom: none; }
+ul li:hover { background: rgba(180,142,255,.06); }
+
+ul li::before {
+  content: '›';
+  position: absolute; left: 14px; top: 9px;
+  color: var(--blue); font-size: 18px; line-height: 1.5;
+}
+
+/* ══ СХЕМА (для лонга про СДВГ) ══ */
+.schema {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  background: #000000;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px 20px;
+  margin: 20px 0;
+  color: var(--amber);
+  line-height: 2;
+}
+
+.schema .dim { color: var(--text-dim); }
+.schema .hi  { color: var(--text-h); }
+
+/* ══ ВОРОНКА ══ */
+.funnel {
+  margin: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.funnel-item {
+  padding: 12px 18px;
+  background: #000000;
+  border: 1px solid var(--border);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: background .15s;
+}
+
+.funnel-item:first-child { border-radius: var(--r) var(--r) 0 0; }
+.funnel-item:last-child  { border-radius: 0 0 var(--r) var(--r); }
+.funnel-item:hover { background: #000000; }
+
+.funnel-item .step {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--amber);
+  flex-shrink: 0;
+  min-width: 52px;
+}
+
+/* ══ АУТРО ══ */
+.wiki-footer {
+  margin-top: 56px;
+  padding: 18px 20px;
+  background: #000000;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.8;
+}
+
+/* ══ ПЛАВАЮЩАЯ КНОПКА ══ */
+#nav-fab {
+  position: fixed;
+  bottom: 28px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #000000;
+  border: 1px solid var(--border2);
+  border-radius: 28px;
+  padding: 10px 20px 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px transparent;
+  transition: transform .2s, box-shadow .2s, background .2s;
+  user-select: none;
+  backdrop-filter: blur(8px);
+}
+
+#nav-fab:hover {
+  background: #000000;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 0 1px rgba(180,142,255,.15);
+}
+
+#nav-fab:active { transform: translateX(-50%) translateY(0); }
+
+#nav-fab-icon {
+  width: 28px; height: 28px;
+  background: #7c3aed;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(180,142,255,.4);
+}
+
+#nav-fab-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; font-weight: 500;
+  color: var(--text-h); white-space: nowrap;
+}
+
+#nav-fab-current {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--text-dim);
+  max-width: 160px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+
+#nav-fab-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+
+/* ══ ШТОРКА ══ */
+#nav-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+  z-index: 600; opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+#nav-overlay.open { opacity: 1; pointer-events: all; }
+
+#nav-sheet {
+  position: fixed;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: min(540px, 100vw);
+  background: #000000;
+  border: 1px solid var(--border2);
+  border-bottom: none;
+  border-radius: 16px 16px 0 0;
+  z-index: 700;
+  transition: transform .3s cubic-bezier(.32,.72,0,1);
+  overflow: hidden;
+  box-shadow: 0 -8px 40px rgba(0,0,0,.5);
+}
+#nav-sheet.open { transform: translateX(-50%) translateY(0); }
+
+#nav-handle {
+  width: 36px; height: 4px;
+  background: var(--border2);
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+#nav-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+#nav-head-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+
+#nav-close {
+  background: #000000; border: 1px solid var(--border);
+  border-radius: 50%; width: 28px; height: 28px;
+  color: var(--text-dim); font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: color .15s, background .15s; line-height: 1;
+}
+#nav-close:hover { color: var(--text-h); background: #000000; }
+
+#nav-list {
+  list-style: none;
+  padding: 8px 0 4px;
+  max-height: 42vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+#nav-list li a {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 20px; text-decoration: none;
+  color: var(--text); font-size: 14px;
+  transition: background .15s, color .15s;
+  border-left: 2px solid transparent;
+}
+#nav-list li a:hover { background: rgba(180,142,255,.08); color: var(--text-h); }
+#nav-list li a.active { color: var(--blue); border-left-color: var(--blue); background: rgba(180,142,255,.08); }
+
+#nav-list .snum {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--text-dim);
+  min-width: 22px; flex-shrink: 0;
+}
+#nav-list li a.active .snum { color: var(--blue); }
+
+/* Глоссарий в шторке */
+#nav-glos {
+  border-top: 1px solid var(--border);
+  padding: 12px 20px 20px;
+}
+#nav-glos-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 10px;
+}
+#nav-glos-tags {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+#nav-glos-tags button {
+  background: #000000; border: 1px solid var(--border);
+  border-radius: 20px; padding: 5px 12px;
+  font-size: 12px; color: var(--green);
+  cursor: pointer; font-family: 'Source Serif 4', serif;
+  transition: background .15s, border-color .15s;
+}
+#nav-glos-tags button:hover { background: #000000; border-color: var(--green2); color: #aeffa8; }
+
+/* ══ ТУЛТИП ══ */
+#tooltip {
+  position: fixed; z-index: 900;
+  width: 300px;
+  background: #000000;
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  box-shadow: 0 12px 40px rgba(0,0,0,.6), 0 0 0 1px transparent;
+  display: none; overflow: hidden;
+}
+#tooltip.visible { display: block; animation: popIn .15s ease; }
+@keyframes popIn {
+  from { opacity:0; transform:translateY(8px) scale(.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+#tip-head {
+  background: #000000; border-bottom: 1px solid var(--border);
+  padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;
+}
+#tip-term { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--green); }
+#tip-close { background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 18px; line-height: 1; padding: 0 2px; transition: color .15s; }
+#tip-close:hover { color: var(--text-h); }
+#tip-body { padding: 14px 16px; font-size: 14px; color: var(--text); line-height: 1.65; }
+#tip-body em { display: block; margin-top: 10px; font-size: 11px; font-style: normal; color: var(--text-dim); font-family: 'JetBrains Mono', monospace; padding-top: 8px; border-top: 1px solid var(--border); }
+
+/* ══ ТЕРМИНЫ ══ */
+.term {
+  color: var(--green);
+  border-bottom: 1px dashed rgba(126,231,135,.4);
+  cursor: pointer; text-decoration: none;
+  transition: color .15s, border-color .15s;
+}
+.term:hover { color: #aeffa8; border-bottom-color: var(--green); }
+
+/* ══ МОБАЙЛ ══ */
+@media (max-width: 600px) {
+  .article-wrap { padding: 44px 16px 140px; }
+  h1 { font-size: 26px; }
+  h2 { font-size: 18px; }
+  .infobox { float: none; width: 100%; margin: 0 0 24px; }
+  #nav-fab { bottom: 20px; }
+  #nav-fab-current, #nav-fab-sep { display: none; }
+  #tooltip { width: calc(100vw - 32px); left: 16px !important; }
+  .sw-btn { font-size: 9px; padding: 6px 10px; }
+}
+
+/* ══ AMOLED OVERRIDE ══ */
+html, body, .page, .article-wrap, #topbar,
+#nav-sheet, #nav-overlay, #tooltip,
+.infobox, .infobox-title, blockquote,
+ul, .schema, .funnel, .funnel-item,
+.wiki-footer, .article-header,
+#nav-fab, #nav-list, #nav-glos,
+#nav-glos-tags button, .sw-btn,
+section, h1, h2, h3, p {
+  background-color: #000000 !important;
+}
+
+#topbar { background: #000000 !important; border-bottom: 1px solid #1e1e1e !important; }
+.infobox { background: #000000 !important; border: 1px solid #2a2a2a !important; }
+.infobox-title { background: #000000 !important; }
+.infobox-row th { background: #000000 !important; }
+blockquote { background: #000000 !important; border-left: 3px solid #4a4070 !important; }
+ul { background: #000000 !important; }
+.schema { background: #000000 !important; }
+.funnel-item { background: #000000 !important; }
+.wiki-footer { background: #000000 !important; }
+#nav-sheet { background: #000000 !important; }
+#nav-fab { background: #111111 !important; }
+#nav-glos-tags button { background: #000000 !important; }
+.sw-btn.active { background: #000000 !important; }
+.article-meta span { background: #000000 !important; }
+#tip-body, #tip-head, #tooltip { background: #000000 !important; }
+
+</style>
+</head>
+<body>
+<div id="bar"></div>
+
+<!-- ТОПБАР -->
+<header id="topbar">
+  <div id="topbar-logo">∎ КультВики</div>
+  <div id="switcher">
+    <button class="sw-btn active" style="--sw-color:#6cb6ff" onclick="switchTo('femboy', this)">
+      Фембои: откуда взялись
+    </button>
+    <button class="sw-btn" style="--sw-color:#e3b341" onclick="switchTo('adhd', this)">
+      СДВГ: разбор поста
+    </button>
+  </div>
+  <div id="topbar-time">2026</div>
+</header>
+
+<!-- ════════════════════════════════
+     ЛОНГ 1 — ФЕМБОИ
+════════════════════════════════ -->
+<div class="page active" id="page-femboy">
+<div class="article-wrap">
+
+  <div class="article-header">
+    <div class="cats">
+      <span>Культурология</span><span>Интернет</span><span>История моды</span>
+    </div>
+    <h1>Откуда вообще взялись фембои и почему их стало так много</h1>
+    <div class="article-meta">
+      <span>📖 ~12 минут</span><span>🗓 2026</span><span>18+</span>
+    </div>
+  </div>
+
+  <table class="infobox">
+    <tr><td class="infobox-title" colspan="2">Справка</td></tr>
+    <tr class="infobox-row"><th>Термин</th><td><span class="term" data-term="femboy">Femboy</span></td></tr>
+    <tr class="infobox-row"><th>Происхождение</th><td>Англ. интернет, 1990-е</td></tr>
+    <tr class="infobox-row"><th>Архетип</th><td><span class="term" data-term="bishonen">Бисёнэн</span> (Япония)</td></tr>
+    <tr class="infobox-row"><th>Аналог</th><td><span class="term" data-term="onnagata">Оннагата</span>, глэм-рок</td></tr>
+    <tr class="infobox-row"><th>Суть</th><td>Эстетика, не идентичность</td></tr>
+  </table>
+
+  <p>Если сидеть в интернете больше пяти минут, рано или поздно натыкаешься на странную вещь. Парень. В юбке. В чулках. Иногда с макияжем. Иногда с кошачьими ушами. И под этим всем гордая подпись — <span class="term" data-term="femboy">femboy</span>.</p>
+  <p>У половины людей реакция примерно одинаковая — «что это вообще за хрень и откуда она вылезла». Другие делают вид, что это абсолютно нормальный элемент интернет-культуры и вообще так было всегда. Как обычно — обе стороны немного фантазируют.</p>
+  <p>Правда скучнее, но интереснее. Фембои не появились вчера. Это просто новая упаковка для довольно старой культурной штуки — мужской феминной эстетики.</p>
+
+  <section id="f1">
+    <h2><span class="sec-num">01</span> Это не новая штука</h2>
+    <p>Идея «женственного мужчины» не новая от слова совсем. История регулярно производила такие вещи. Просто каждый раз они назывались иначе и находились люди, которые кричали «это конец нормальности».</p>
+    <p>Потом всё устаканивалось. Потом снова всплывало. Круговорот паники в природе. Работает без сбоев уже несколько тысяч лет.</p>
+  </section>
+
+  <section id="f2">
+    <h2><span class="sec-num">02</span> Фараоны, каблуки и театр</h2>
+    <h3>Древний Египет</h3>
+    <p>Мужчины там поголовно пользовались макияжем. Растирали <span class="term" data-term="kohl">кхол</span> вокруг глаз. Фараоны. Воины. Жрецы. Строители пирамид, вероятно, тоже — просто об этом не осталось фресок. Это была не прихоть — подводка защищала от солнца и злых духов одновременно.</p>
+    <p>Если сказать об этом современному интернет-«альфа-самцу», он почувствует <span class="term" data-term="kogdis">когнитивный диссонанс</span> и закроет вкладку.</p>
+    <h3>Театр кабуки, Япония, XVII век</h3>
+    <p>Государство запретило женщинам выступать на сцене. Просто взяло и запретило. Так появились актёры-<span class="term" data-term="onnagata">оннагата</span> — мужчины, которые профессионально играли женские роли. Годами учились копировать женскую пластику, голос, жесты. Иногда настолько хорошо, что становились эталоном женственности.</p>
+    <h3>Европа, XVII–XVIII век</h3>
+    <p>Парики. Каблуки. Чулки. Макияж. Кружево. Всё это на мужчинах. Признак статуса. Красный каблук ввёл Людовик XIV — только аристократы могли носить. Кстати, каблуки изобрели персидские всадники в X веке для удобства в стременах. Вещи мигрируют. Всегда.</p>
+    <blockquote><p>Представления о том, как должен выглядеть мужчина, меняются каждые пару столетий. В XVIII веке — фарфоровая статуэтка в кружевах. Через двести лет будут смеяться над нашими стандартами.</p></blockquote>
+  </section>
+
+  <section id="f3">
+    <h2><span class="sec-num">03</span> Глэм-рок и андрогинность</h2>
+    <p>Образ Ziggy Stardust — <span class="term" data-term="androgyny">андрогинный</span> инопланетный рок-звезда. Боуи продавал пластинки миллионами. Умер национальным сокровищем Великобритании. Никто не называл его фембоем. Его называли гением.</p>
+    <p>Потом был Prince. Потом Boy George. Потом целое поколение <span class="term" data-term="visualkei">визуал-кей</span> групп — X Japan, Malice Mizer — в образах, перед которыми среднестатистический тиктокер в юбке выглядит сдержанно.</p>
+  </section>
+
+  <section id="f4">
+    <h2><span class="sec-num">04</span> Япония и бисёнэн</h2>
+    <p>Это называется <span class="term" data-term="bishonen">бисёнэн</span> (美少年) — буквально «красивый юноша». Архетип зародился в манге в 1970-х. Группа художниц «Год 24» создала визуальный язык андрогинной мужской красоты. Классический механизм: то, что нельзя в реальности, находит выход в фантазии.</p>
+    <blockquote><p>Интернет — ускоритель странных идей. Берёт нишевую штуку из японской анимации 1970-х, добавляет алгоритмов, и через пятьдесят лет миллионы людей спорят, конец ли это цивилизации.</p></blockquote>
+  </section>
+
+  <section id="f5">
+    <h2><span class="sec-num">05</span> Когда появился термин</h2>
+    <p>Слово <span class="term" data-term="femboy">femboy</span> началось как грубый сленг в конце 90-х. К 2013 году стало нейтральным термином — Dictionary.com даёт определение без привязки к ориентации. То есть это про внешность. Про стиль. Всё остальное люди додумывают сами.</p>
+  </section>
+
+  <section id="f6">
+    <h2><span class="sec-num">06</span> Алгоритмы и оптический обман</h2>
+    <p>Алгоритмы показывают самые яркие случаи. Создаётся ощущение «этого везде слишком много». Хотя в реальной жизни процент таких людей — крошечный. Просто они получили видимость, которой раньше не было.</p>
+    <blockquote><p>Интернет не создал фембоев. Он поставил прожектор на то, что и раньше существовало в тени.</p></blockquote>
+  </section>
+
+  <section id="f7">
+    <h2><span class="sec-num">07</span> Эстетика ≠ идентичность</h2>
+    <p><strong>Эстетика / стиль.</strong> Выбор образа — не декларация внутреннего устройства.</p>
+    <p><strong>Гендерная идентичность.</strong> То, кем человек себя ощущает внутри. Не обязательно связана с одеждой никак.</p>
+    <p><strong>Сексуальная ориентация.</strong> Человек в юбке может быть гетеросексуальным. Это звучит очевидно. Но почему-то приходится повторять каждый раз.</p>
+    <p><strong>Косплей / персонаж.</strong> Актёр, сыгравший злодея, не становится злодеем.</p>
+  </section>
+
+  <section id="f8">
+    <h2><span class="sec-num">08</span> Итог</h2>
+    <p>Есть старый культурный феномен — андрогинная мужская эстетика. С историей в несколько тысяч лет, которую очень удобно забывать. Интернет дал ему новое название. Алгоритмы сделали его вирусным. Рынок превратил его в контент.</p>
+    <blockquote><p>Фембои не появились внезапно. Их не изобрели тиктокеры. Через пару лет появится что-нибудь новое. И все снова будут задавать один и тот же вопрос. Ответ всегда одинаковый. Просто каждый раз приходится объяснять заново.</p></blockquote>
+    <div class="wiki-footer">Культурология · Интернет-субкультуры · 2026</div>
+  </section>
+
+</div>
+</div>
+
+<!-- ════════════════════════════════
+     ЛОНГ 2 — СДВГ
+════════════════════════════════ -->
+<div class="page" id="page-adhd">
+<div class="article-wrap">
+
+  <div class="article-header">
+    <div class="cats">
+      <span>Нейронаука</span><span>Критика</span><span>Медиаграмотность</span>
+    </div>
+    <h1>Разбор поста «Проблема СДВГ, которая разрушила мою жизнь» — пока эмоции</h1>
+    <div class="article-meta">
+      <span>📖 ~8 минут</span><span>🗓 2026</span><span>Мнение</span>
+    </div>
+  </div>
+
+  <table class="infobox">
+    <tr><td class="infobox-title" colspan="2">Справка</td></tr>
+    <tr class="infobox-row"><th>Тема</th><td><span class="term" data-term="adhd">СДВГ</span></td></tr>
+    <tr class="infobox-row"><th>Жанр</th><td>Критический разбор</td></tr>
+    <tr class="infobox-row"><th>Ключевой приём</th><td><span class="term" data-term="funnel">Воронка доверия</span></td></tr>
+    <tr class="infobox-row"><th>Проблема</th><td>Личный опыт → универсальная теория</td></tr>
+    <tr class="infobox-row"><th>Итог</th><td>Стек <span class="term" data-term="nootropics">ноотропов</span></td></tr>
+  </table>
+
+  <p>Сразу оговорка. Это не полный разбор автора. Я не копал его канал, не смотрел всю его деятельность и не анализировал всё, что он пишет.</p>
+  <p>Это реакция на один конкретный пост. Просто потому что иногда одного текста достаточно, чтобы увидеть, как человек строит аргументацию.</p>
+  <p>Полный разбор будет позже. А пока — эмоциональная реакция на этот конкретный текст.</p>
+
+  <section id="a1">
+    <h2><span class="sec-num">01</span> Что делает текст «умным»</h2>
+    <p>Пост написан очень убедительно. Там есть всё, что обычно делает текст похожим на серьёзный:</p>
+    <ul>
+      <li>Нейробиология и <span class="term" data-term="dopamine">дофамин</span></li>
+      <li>Вентральный стриатум</li>
+      <li><span class="term" data-term="rpe">Reward prediction error</span></li>
+      <li>Генетика и гормоны</li>
+      <li>Аутизм и длинные объяснения</li>
+    </ul>
+    <p>Читаешь и думаешь: чёрт, человек реально разобрался.</p>
+    <p>А потом начинаешь замечать странную вещь. Текст постоянно скачет между двумя режимами: личная история — и почти научная теория о том, как устроен мозг. И вот здесь начинается главная проблема.</p>
+  </section>
+
+  <section id="a2">
+    <h2><span class="sec-num">02</span> Личный опыт → универсальная модель</h2>
+    <p>Сначала всё выглядит нормально. Человек пишет: мне тяжело начинать задачи, особенно рутинные. Это вообще классическая проблема при <span class="term" data-term="adhd">СДВГ</span>. Миллионы людей с этим живут.</p>
+    <p>Но дальше происходит странный трюк. Личный опыт постепенно превращается в универсальную модель мотивации. У него появляется «тонический <span class="term" data-term="dopamine">дофамин</span>», «порог запуска действия», «числовые значения мотивации». И в итоге получается почти механическая схема:</p>
+
+    <div class="schema">
+      <div><span class="dim">задача получила ценность</span> <span class="hi">30</span></div>
+      <div><span class="dim">порог запуска</span> <span class="hi">35</span></div>
+      <div><span class="dim">вывод:</span> мозг не может начать</div>
+    </div>
+
+    <p>Звучит красиво. Но проблема в том, что нейронаука так не работает.</p>
+    <p>В мозге нет таблички Excel с колонкой «дофамин = 35». Да, <span class="term" data-term="dopamine">дофамин</span> участвует в мотивации. Да, <span class="term" data-term="rpe">reward prediction error</span> реально существует. Но превращать это в математическую модель «ниже порога — действие невозможно» — это уже личная интерпретация, а не наука.</p>
+  </section>
+
+  <section id="a3">
+    <h2><span class="sec-num">03</span> Лестница исключительности</h2>
+    <p>Дальше автор начинает объяснять, почему его ситуация особенно тяжёлая. И тут появляется классическая лестница:</p>
+    <ul>
+      <li>у меня <span class="term" data-term="adhd">СДВГ</span></li>
+      <li>у меня <span class="term" data-term="asd">РАС</span></li>
+      <li>у меня низкий <span class="term" data-term="oxytocin">окситоцин</span></li>
+      <li>у меня ген <span class="term" data-term="drd2">DRD2</span></li>
+      <li>я мужчина, у мужчин меньше эстрогена</li>
+    </ul>
+    <p>Складывается почти идеальная трагическая конструкция. Редкий биологический набор, который делает жизнь почти невозможной.</p>
+    <p>Но если смотреть спокойно — многие из этих факторов это очень слабые <span class="term" data-term="correlation">корреляции</span>, а не приговор. Ген <span class="term" data-term="drd2">DRD2</span> вообще не является «геном СДВГ». Это один из сотен генетических факторов, которые могут немного влиять на дофаминовую систему.</p>
+    <p>Иначе половина мужского населения планеты после 30 лежала бы на диване и смотрела в потолок. Хотя, если честно, иногда кажется, что так и происходит.</p>
+  </section>
+
+  <section id="a4">
+    <h2><span class="sec-num">04</span> Про окситоцин и РАС</h2>
+    <p>Он пишет, что из-за <span class="term" data-term="asd">РАС</span> у него нет чувства принадлежности к группе, поэтому коучинг и социальные штуки не работают. Часть правды здесь есть — люди с РАС действительно иногда хуже реагируют на социальные стимулы.</p>
+    <p>Но делать из этого вывод «мне не может помочь никакая социальная поддержка» — это слишком сильное утверждение. Люди с аутизмом часто находят мотивацию в специальных интересах, системах, интеллектуальных задачах. Иногда даже сильнее, чем нейротипичные.</p>
+    <p>Модель «нет <span class="term" data-term="oxytocin">окситоцина</span> — нет мотивации» звучит красиво, но сильно упрощает реальность.</p>
+  </section>
+
+  <section id="a5">
+    <h2><span class="sec-num">05</span> Воронка доверия</h2>
+    <p>После всей длинной истории про нейробиологию автор приходит к довольно неожиданному финалу. Его решение — стек добавок:</p>
+    <ul>
+      <li>мукуна (<span class="term" data-term="ldopa">L-DOPA</span>)</li>
+      <li>ацетил-L-карнитин</li>
+      <li>NAC</li>
+      <li>кофе + L-теанин</li>
+    </ul>
+    <p>Некоторые имеют биологические эффекты. Но ни один не является доказанным лечением <span class="term" data-term="adhd">СДВГ</span>. Это скорее экспериментальная сборка <span class="term" data-term="nootropics">ноотропов</span>.</p>
+
+    <p>И вот здесь появляется ощущение, что весь текст работает как <span class="term" data-term="funnel">воронка доверия</span>:</p>
+
+    <div class="funnel">
+      <div class="funnel-item"><span class="step">ШАГ 1</span> Личная боль — читатель сопереживает</div>
+      <div class="funnel-item"><span class="step">ШАГ 2</span> Сложная нейробиология — читатель впечатлён</div>
+      <div class="funnel-item"><span class="step">ШАГ 3</span> Уникальная биологическая ситуация — читатель верит</div>
+      <div class="funnel-item"><span class="step">ШАГ 4</span> У меня есть решение и канал с лайфхаками</div>
+    </div>
+
+    <p>Это очень знакомая интернет-конструкция. Она не обязательно злая — иногда люди правда верят в свои выводы. Но она создаёт ощущение, что перед нами не просто рассказ о жизни с СДВГ, а построение личной теории мозга.</p>
+  </section>
+
+  <section id="a6">
+    <h2><span class="sec-num">06</span> Это не окончательный вывод</h2>
+    <p>Это просто реакция на один пост. Возможно, если посмотреть весь его канал, картина окажется сложнее. Может быть он аккуратнее работает с источниками. Может быть честнее разделяет опыт и науку.</p>
+    <p>А может быть наоборот. Именно поэтому я хочу позже разобрать всю его деятельность, а не один текст.</p>
+    <blockquote><p>Потому что иногда один пост — это просто эмоция. А иногда это верхушка целой системы идей. И вот тогда разбирать становится намного интереснее.</p></blockquote>
+    <div class="wiki-footer">Нейронаука · Критика · Медиаграмотность · 2026</div>
+  </section>
+
+</div>
+</div>
+
+<!-- ══ ПЛАВАЮЩАЯ КНОПКА ══ -->
+<div id="nav-fab">
+  <div id="nav-fab-icon">☰</div>
+  <div id="nav-fab-sep"></div>
+  <div>
+    <div id="nav-fab-text">Содержание</div>
+    <div id="nav-fab-current">Начало</div>
+  </div>
+</div>
+
+<!-- ══ ШТОРКА ══ -->
+<div id="nav-overlay"></div>
+<div id="nav-sheet">
+  <div id="nav-handle"></div>
+  <div id="nav-head">
+    <span id="nav-head-title">Содержание</span>
+    <button id="nav-close">×</button>
+  </div>
+  <ul id="nav-list"></ul>
+  <div id="nav-glos">
+    <div id="nav-glos-title">Глоссарий</div>
+    <div id="nav-glos-tags"></div>
+  </div>
+</div>
+
+<!-- ══ ТУЛТИП ══ -->
+<div id="tooltip">
+  <div id="tip-head">
+    <span id="tip-term"></span>
+    <button id="tip-close">×</button>
+  </div>
+  <div id="tip-body"></div>
+</div>
+
+<script>
+/* ════ ГЛОССАРИЙ ════ */
+const G = {
+  femboy:      { label:'Femboy', def:'Мужчина с подчёркнуто женственной внешностью. Термин возник в 1990-х как сленг, к 2013 году стал нейтральным. Обозначает эстетику — не ориентацию и не идентичность.', note:'от англ. feminine + boy' },
+  bishonen:    { label:'Бисёнэн (美少年)', def:'Японский архетип «красивого юноши» с андрогинными чертами. Возник в манге 1970-х, стал основой визуального языка аниме и J-рока.', note:'яп. 美少年 — «красивый юноша»' },
+  onnagata:    { label:'Оннагата (女形)', def:'Актёры японского театра кабуки, исполняющие женские роли. Традиция возникла в XVII веке после государственного запрета на участие женщин в театре.', note:'яп. 女形 — «женская форма»' },
+  visualkei:   { label:'Визуал-кей', def:'Японское музыкальное движение 1980–90-х. Театральный образ: макияж, женственная одежда, экстравагантные причёски. X Japan, Malice Mizer — классика жанра.', note:'яп. ヴィジュアル系 — «визуальный стиль»' },
+  androgyny:   { label:'Андрогинность', def:'Сочетание мужских и женских черт во внешности или поведении. Эстетический выбор, не биологическая характеристика. В искусстве с античных времён.', note:'от греч. ἀνδρόγυνος' },
+  kogdis:      { label:'Когнитивный диссонанс', def:'Психологический дискомфорт при столкновении с информацией, противоречащей убеждениям. Мозг злится, когда ломается привычная система категорий.', note:'термин Леона Фестингера, 1957' },
+  kohl:        { label:'Кхол (Kohl)', def:'Косметика из Древнего Египта — порошок на основе сурьмы. Наносился вокруг глаз мужчинами и женщинами. Защита от солнца и злых духов.', note:'использовался с ~3100 до н.э.' },
+  adhd:        { label:'СДВГ', def:'Синдром дефицита внимания и гиперактивности. Нейроразвивающее расстройство, характеризующееся трудностями с концентрацией, импульсивностью и регуляцией активности. Связано с особенностями дофаминовой системы.', note:'МКБ-11: 6A05' },
+  dopamine:    { label:'Дофамин', def:'Нейромедиатор, связанный с системой вознаграждения мозга. Участвует в мотивации, обучении и получении удовольствия. При СДВГ дофаминовая регуляция работает иначе — но не по схеме «больше/меньше».', note:'не «гормон счастья» — это упрощение' },
+  rpe:         { label:'Reward Prediction Error', def:'Сигнал ошибки предсказания вознаграждения. Дофаминовые нейроны реагируют не на само вознаграждение, а на расхождение между ожидаемым и полученным. Реальный механизм обучения — но не «порог запуска действия».', note:'открыт Вольфрамом Шульцем в 1990-х' },
+  asd:         { label:'РАС (аутизм)', def:'Расстройство аутистического спектра. Нейроразвивающее состояние с особенностями социальной коммуникации и обработки информации. Часто сочетается с СДВГ. Не означает отсутствия мотивации.', note:'МКБ-11: 6A02' },
+  oxytocin:    { label:'Окситоцин', def:'Нейропептид, связанный с социальными связями, доверием и привязанностью. Роль в мотивации сложнее, чем «есть — нет». Влияет на поведение, но не является единственным источником мотивации.', note:'упрощённо называют «гормоном доверия»' },
+  drd2:        { label:'Ген DRD2', def:'Ген рецептора дофамина D2. Один из сотен генетических вариантов, связанных с дофаминовой системой. Не является «геном СДВГ» — это слабая корреляция, не детерминизм.', note:'ассоциации с СДВГ статистические, не причинные' },
+  correlation: { label:'Корреляция vs причинность', def:'Корреляция означает, что два явления связаны статистически — но не обязательно одно вызывает другое. Многие генетические и гормональные факторы коррелируют с СДВГ, но не «программируют» его.', note:'классическая ошибка популярной науки' },
+  nootropics:  { label:'Ноотропы', def:'Вещества, предположительно улучшающие когнитивные функции. Доказательная база большинства очень слабая. Часть имеет реальные эффекты, но это не то же самое, что доказанное лечение расстройств.', note:'рынок ~$10 млрд — маркетинг обгоняет науку' },
+  ldopa:       { label:'L-DOPA (мукуна)', def:'Предшественник дофамина в мозге. Используется в лечении болезни Паркинсона. Мукуна — растение с природным содержанием L-DOPA. Самостоятельный приём без надзора врача — экспериментально и рискованно.', note:'препарат с серьёзными побочными эффектами' },
+  funnel:      { label:'Воронка доверия', def:'Риторическая конструкция: личная история → экспертность → уникальность ситуации → готовое решение. Характерна для инфобизнеса. Не обязательно манипулятивная, но создаёт иллюзию объективности там, где её нет.', note:'классика интернет-маркетинга знаний' },
+};
+
+/* ════ КОНФИГИ ЛОНГОВ ════ */
+const ARTICLES = {
+  femboy: {
+    sections: [
+      { id:'f1', label:'Это не новая штука' },
+      { id:'f2', label:'Фараоны, каблуки и театр' },
+      { id:'f3', label:'Глэм-рок и андрогинность' },
+      { id:'f4', label:'Япония и бисёнэн' },
+      { id:'f5', label:'Когда появился термин' },
+      { id:'f6', label:'Алгоритмы и оптический обман' },
+      { id:'f7', label:'Эстетика ≠ идентичность' },
+      { id:'f8', label:'Итог' },
+    ],
+    glos: ['femboy','bishonen','onnagata','visualkei','androgyny','kogdis','kohl'],
+  },
+  adhd: {
+    sections: [
+      { id:'a1', label:'Что делает текст «умным»' },
+      { id:'a2', label:'Личный опыт → универсальная модель' },
+      { id:'a3', label:'Лестница исключительности' },
+      { id:'a4', label:'Про окситоцин и РАС' },
+      { id:'a5', label:'Воронка доверия' },
+      { id:'a6', label:'Это не окончательный вывод' },
+    ],
+    glos: ['adhd','dopamine','rpe','asd','oxytocin','drd2','correlation','nootropics','ldopa','funnel'],
+  },
+};
+
+let currentArticle = 'femboy';
+
+/* ════ ПЕРЕКЛЮЧЕНИЕ ЛОНГОВ ════ */
+function switchTo(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.sw-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  currentArticle = id;
+  buildNav();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  document.getElementById('nav-fab-current').textContent = 'Начало';
+  rebindObserver();
+}
+
+/* ════ НАВИГАЦИЯ ════ */
+function buildNav() {
+  const art = ARTICLES[currentArticle];
+  const list = document.getElementById('nav-list');
+  list.innerHTML = art.sections.map((s, i) =>
+    `<li><a href="#${s.id}"><span class="snum">${String(i+1).padStart(2,'0')}</span>${s.label}</a></li>`
+  ).join('');
+  list.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', closeSheet);
+  });
+
+  const tags = document.getElementById('nav-glos-tags');
+  tags.innerHTML = art.glos.map(k =>
+    `<button onclick="openGlos('${k}')">${G[k]?.label || k}</button>`
+  ).join('');
+}
+
+/* ════ ШТОРКА ════ */
+const fab     = document.getElementById('nav-fab');
+const overlay = document.getElementById('nav-overlay');
+const sheet   = document.getElementById('nav-sheet');
+const nclose  = document.getElementById('nav-close');
+
+function openSheet()  { sheet.classList.add('open'); overlay.classList.add('open'); }
+function closeSheet() { sheet.classList.remove('open'); overlay.classList.remove('open'); }
+
+fab.addEventListener('click', openSheet);
+nclose.addEventListener('click', closeSheet);
+overlay.addEventListener('click', closeSheet);
+
+/* ════ ТУЛТИП ════ */
+const tooltip = document.getElementById('tooltip');
+const tipTerm = document.getElementById('tip-term');
+const tipBody = document.getElementById('tip-body');
+const tipClose= document.getElementById('tip-close');
+
+function showTooltip(key, e) {
+  const d = G[key]; if (!d) return;
+  tipTerm.textContent = d.label;
+  tipBody.innerHTML = d.def + (d.note ? `<em>${d.note}</em>` : '');
+  tooltip.classList.add('visible');
+  if (e) {
+    const tw=300, th=160, vw=window.innerWidth, vh=window.innerHeight;
+    let x = e.clientX+14, y = e.clientY+14;
+    if (x+tw > vw-12) x = e.clientX-tw-8;
+    if (y+th > vh-12) y = e.clientY-th-8;
+    tooltip.style.left = Math.max(8,x)+'px';
+    tooltip.style.top  = Math.max(8,y)+'px';
+  }
+}
+
+function openGlos(key) {
+  closeSheet();
+  setTimeout(() => {
+    showTooltip(key, { clientX: window.innerWidth/2, clientY: window.innerHeight/2 });
+  }, 320);
+}
+
+tipClose.addEventListener('click', () => tooltip.classList.remove('visible'));
+document.addEventListener('click', e => {
+  if (!tooltip.contains(e.target) && !e.target.classList.contains('term'))
+    tooltip.classList.remove('visible');
+});
+document.querySelectorAll('.term').forEach(el => {
+  el.addEventListener('click', e => { e.stopPropagation(); showTooltip(el.dataset.term, e); });
+});
+
+/* ════ ПРОГРЕСС + АКТИВНЫЙ РАЗДЕЛ ════ */
+const bar = document.getElementById('bar');
+let observer = null;
+
+function rebindObserver() {
+  if (observer) observer.disconnect();
+  const page = document.querySelector('.page.active');
+  const secs = page.querySelectorAll('section[id]');
+  const links = () => document.querySelectorAll('#nav-list a');
+  const fabCur = document.getElementById('nav-fab-current');
+  const labels = {};
+  ARTICLES[currentArticle].sections.forEach(s => labels[s.id] = s.label);
+
+  observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links().forEach(l => l.classList.remove('active'));
+        const id = e.target.id;
+        const a = document.querySelector(`#nav-list a[href="#${id}"]`);
+        if (a) a.classList.add('active');
+        fabCur.textContent = labels[id] || '';
+      }
+    });
+  }, { rootMargin: '-15% 0px -75% 0px' });
+
+  secs.forEach(s => observer.observe(s));
+}
+
+window.addEventListener('scroll', () => {
+  const h = document.documentElement;
+  bar.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + '%';
+});
+
+/* ════ ИНИТ ════ */
+buildNav();
+rebindObserver();
+</script>
+</body>
+</html>
